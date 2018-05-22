@@ -5,7 +5,7 @@ import logo from '../logo.svg';
 
 import './Navigation.css';
 
-interface IState {ifSigned: boolean}
+interface IState {ifSigned: boolean, email: string, pass: string}
 
 export default class Navigation extends React.Component<{}, IState> {
 
@@ -13,28 +13,37 @@ export default class Navigation extends React.Component<{}, IState> {
         super(props);
 
         this.onLoginClick = this.onLoginClick.bind(this);
+        this.onLogoutClick = this.onLogoutClick.bind(this);
         this.render = this.render.bind(this);
-        this.state = {ifSigned : false};
+        this.state = {ifSigned : false, email: "", pass: ""};
     }
 
     public componentDidMount(): void {
 
         firebase.auth().onAuthStateChanged( function (user) {
-            user = firebase.auth().currentUser;
-            this.setState( {ifSigned: !!user});
-            console.log(this.state);
+            if(user) {
+                this.setState( {ifSigned: true, email: firebase.auth().currentUser.email});
+            }
+            else {
+                this.setState( {ifSigned: false, email: ""});
+            }
         }.bind(this));
     }
 
     public render() {
         return (
-            <div className="nav navbar d-flex flex-row align-items-end">
-                <img src={logo} className="navbar-toggler-icon" alt="logo" />
-                <a className="align-middle ">{firebase.auth().currentUser !== null ? firebase.auth().currentUser!.email : ""}</a>
+            <div className="nav navbar d-flex flex-row align-items-end ">
+                {this.state.ifSigned ?
+                    <a>Hello, <b>{this.state.email}</b></a> :
+                    <div className="d-flex justify-content-around">
+                        <input type="email" onChange={event => {this.setState({email: event.target.value})}} className="form-control" placeholder="Type email"/>
+                        <input type="password" onChange={event => {this.setState({pass: event.target.value})}} className="form-control" placeholder="Type password"/>
+                    </div>
+                }
                 { this.state.ifSigned ?
-                    <a className="align-middle" onClick={this.onLogoutClick}>Logout</a>
+                    <button className="btn btn-default" onClick={this.onLogoutClick}>Logout</button>
                     :
-                    <a className="align-middle" onClick={this.onLoginClick}>Login</a>
+                    <button className="btn btn-default" onClick={this.onLoginClick}>Login</button>
                 }
             </div>
         );
@@ -42,15 +51,13 @@ export default class Navigation extends React.Component<{}, IState> {
 
     private onLogoutClick() {
         firebase.auth().signOut().then(() => {
-
+            this.setState({email: "", pass: ""});
         }).catch(error => {
-
-        })
+        });
     }
 
     private onLoginClick() {
-        console.log(firebase.auth().currentUser);
-        firebase.auth().signInWithEmailAndPassword("z@z.pl", "qwerty").catch(error => {
+        firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass).catch(error => {
 
         })
     }

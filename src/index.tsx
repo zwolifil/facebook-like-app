@@ -3,7 +3,7 @@ import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import * as firebase from 'firebase';
 import Navigation from './Components/Navigation';
-import Signup from './Components/Signup';
+import Signup from "./Components/Signup";
 
 
 const config = {
@@ -16,9 +16,25 @@ const config = {
 };
 firebase.initializeApp(config);
 
-ReactDOM.render(
-    <div>
-        <Navigation />
-        < Signup />
-    </div>,
-    document.getElementById('root'));
+interface IState {toRender: string}
+
+class App extends React.Component<{}, IState> {
+
+    constructor(props: {}) {
+        super(props);
+
+
+        this.state = {toRender: ""};
+    }
+
+    public render() {
+        return (
+            <div>
+                <Navigation/>
+                <Signup />
+            </div>
+        );
+    }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));

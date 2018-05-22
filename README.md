@@ -213,12 +213,20 @@ In addition to [ES6](https://github.com/lukehoban/es6features) syntax features, 
 * [Async/await](https://github.com/tc39/ecmascript-asyncawait) (ES2017).
 * [Object Rest/Spread Properties](https://github.com/sebmarkbage/ecmascript-rest-spread) (stage 3 proposal).
 * [Dynamic import()](https://github.com/tc39/proposal-dynamic-import) (stage 3 proposal)
+<<<<<<< HEAD
 * [Class Fields and Static Properties](https://github.com/tc39/proposal-class-public-fields) (stage 2 proposal).
+=======
+* [Class Fields and Static Properties](https://github.com/tc39/proposal-class-public-fields) (part of stage 3 proposal).
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 * [JSX](https://facebook.github.io/react/docs/introducing-jsx.html) and [Flow](https://flowtype.org/) syntax.
 
 Learn more about [different proposal stages](https://babeljs.io/docs/plugins/#presets-stage-x-experimental-presets-).
 
+<<<<<<< HEAD
 While we recommend to use experimental proposals with some caution, Facebook heavily uses these features in the product code, so we intend to provide [codemods](https://medium.com/@cpojer/effective-javascript-codemods-5a6686bb46fb) if any of these proposals change in the future.
+=======
+While we recommend using experimental proposals with some caution, Facebook heavily uses these features in the product code, so we intend to provide [codemods](https://medium.com/@cpojer/effective-javascript-codemods-5a6686bb46fb) if any of these proposals change in the future.
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 Note that **the project only includes a few ES6 [polyfills](https://en.wikipedia.org/wiki/Polyfill)**:
 
@@ -278,7 +286,10 @@ Then add the block below to your `launch.json` file and put it inside the `.vsco
     "request": "launch",
     "url": "http://localhost:3000",
     "webRoot": "${workspaceRoot}/src",
+<<<<<<< HEAD
     "userDataDir": "${workspaceRoot}/.vscode/chrome",
+=======
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
     "sourceMapPathOverrides": {
       "webpack:///src/*": "${webRoot}/*"
     }
@@ -289,6 +300,11 @@ Then add the block below to your `launch.json` file and put it inside the `.vsco
 
 Start your app by running `npm start`, and start debugging in VS Code by pressing `F5` or by clicking the green debug icon. You can now write code, set breakpoints, make changes to the code, and debug your newly modified code—all from your editor.
 
+<<<<<<< HEAD
+=======
+Having problems with VS Code Debugging? Please see their [troubleshooting guide](https://github.com/Microsoft/vscode-chrome-debug/blob/master/README.md#troubleshooting).
+
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 ### WebStorm
 
 You would need to have [WebStorm](https://www.jetbrains.com/webstorm/) and [JetBrains IDE Support](https://chrome.google.com/webstore/detail/jetbrains-ide-support/hmhgeddbohgjknpmjagkdomcpobmllji) Chrome extension installed.
@@ -613,11 +629,20 @@ Then we can change `start` and `build` scripts to include the CSS preprocessor c
    "scripts": {
      "build-css": "node-sass-chokidar src/ -o src/",
      "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+<<<<<<< HEAD
 -    "start": "react-scripts-ts start",
 -    "build": "react-scripts-ts build",
 +    "start-js": "react-scripts-ts start",
 +    "start": "npm-run-all -p watch-css start-js",
 +    "build": "npm run build-css && react-scripts-ts build",
+=======
+-    "start": "react-scripts start",
+-    "build": "react-scripts build",
++    "start-js": "react-scripts start",
++    "start": "npm-run-all -p watch-css start-js",
++    "build-js": "react-scripts build",
++    "build": "npm-run-all build-css build-js",
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
      "test": "react-scripts test --env=jsdom",
      "eject": "react-scripts eject"
    }
@@ -641,6 +666,7 @@ Now running `npm start` and `npm run build` also builds Sass files.
 
 With Webpack, using static assets like images and fonts works similarly to CSS.
 
+<<<<<<< HEAD
 You can **`import` a file right in a TypeScript module**. This tells Webpack to include that file in the bundle. Unlike CSS imports, importing a file gives you a string value. This value is the final path you can reference in your code, e.g. as the `src` attribute of an image or the `href` of a link to a PDF.
 
 To reduce the number of requests to the server, importing images that are less than 10,000 bytes returns a [data URI](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) instead of a path. This applies to the following file extensions: bmp, gif, jpg, jpeg, and png. SVG files are excluded due to [#1153](https://github.com/facebookincubator/create-react-app/issues/1153).
@@ -667,6 +693,17 @@ Now that the compiler is configured, here is an example of importing an image fi
 ```js
 import React from 'react';
 import logo from './logo.svg'; // Tell Webpack this JS file uses this image
+=======
+You can **`import` a file right in a JavaScript module**. This tells Webpack to include that file in the bundle. Unlike CSS imports, importing a file gives you a string value. This value is the final path you can reference in your code, e.g. as the `src` attribute of an image or the `href` of a link to a PDF.
+
+To reduce the number of requests to the server, importing images that are less than 10,000 bytes returns a [data URI](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) instead of a path. This applies to the following file extensions: bmp, gif, jpg, jpeg, and png. SVG files are excluded due to [#1153](https://github.com/facebookincubator/create-react-app/issues/1153).
+
+Here is an example:
+
+```js
+import React from 'react';
+import logo from './logo.png'; // Tell Webpack this JS file uses this image
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 console.log(logo); // /logo.84287d09.png
 
@@ -972,7 +1009,11 @@ REACT_APP_SECRET_CODE=abcdef
 
 `.env` files **should be** checked into source control (with the exclusion of `.env*.local`).
 
+<<<<<<< HEAD
 #### What other `.env` files are can be used?
+=======
+#### What other `.env` files can be used?
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 >Note: this feature is **available with `react-scripts@1.0.0` and higher**.
 
@@ -1077,7 +1118,11 @@ To tell the development server to proxy any unknown requests to your API server 
   "proxy": "http://localhost:4000",
 ```
 
+<<<<<<< HEAD
 This way, when you `fetch('/api/todos')` in development, the development server will recognize that it’s not a static asset, and will proxy your request to `http://localhost:4000/api/todos` as a fallback. The development server will only attempt to send requests without a `text/html` accept header to the proxy.
+=======
+This way, when you `fetch('/api/todos')` in development, the development server will recognize that it’s not a static asset, and will proxy your request to `http://localhost:4000/api/todos` as a fallback. The development server will **only** attempt to send requests without `text/html` in its `Accept` header to the proxy.
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 Conveniently, this avoids [CORS issues](http://stackoverflow.com/questions/21854516/understanding-ajax-cors-and-security-considerations) and error messages like this in development:
 
@@ -1143,7 +1188,11 @@ You may also specify any configuration value [`http-proxy-middleware`](https://g
 All requests matching this path will be proxies, no exceptions. This includes requests for `text/html`, which the standard `proxy` option does not proxy.
 
 If you need to specify multiple proxies, you may do so by specifying additional entries.
+<<<<<<< HEAD
 You may also narrow down matches using `*` and/or `**`, to match the path exactly or any subpath.
+=======
+Matches are regular expressions, so that you can use a regexp to match multiple paths.
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 ```js
 {
   // ...
@@ -1164,12 +1213,20 @@ You may also narrow down matches using `*` and/or `**`, to match the path exactl
       // ...
     },
     // Matches /bar/abc.html but not /bar/sub/def.html
+<<<<<<< HEAD
     "/bar/*.html": {
+=======
+    "/bar/[^/]*[.]html": {
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
       "target": "<url_3>",
       // ...
     },
     // Matches /baz/abc.html and /baz/sub/def.html
+<<<<<<< HEAD
     "/baz/**/*.html": {
+=======
+    "/baz/.*/.*[.]html": {
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
       "target": "<url_4>"
       // ...
     }
@@ -1256,7 +1313,11 @@ If you use a Node server, you can even share the route matching logic between th
 
 ## Pre-Rendering into Static HTML Files
 
+<<<<<<< HEAD
 If you’re hosting your `build` with a static hosting provider you can use [react-snapshot](https://www.npmjs.com/package/react-snapshot) to generate HTML pages for each route, or relative link, in your application. These pages will then seamlessly become active, or “hydrated”, when the JavaScript bundle has loaded.
+=======
+If you’re hosting your `build` with a static hosting provider you can use [react-snapshot](https://www.npmjs.com/package/react-snapshot) or [react-snap](https://github.com/stereobooster/react-snap) to generate HTML pages for each route, or relative link, in your application. These pages will then seamlessly become active, or “hydrated”, when the JavaScript bundle has loaded.
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 There are also opportunities to use this outside of static hosting, to take the pressure off the server when generating and caching routes.
 
@@ -1335,8 +1396,13 @@ it('sums numbers', () => {
 });
 ```
 
+<<<<<<< HEAD
 All `expect()` matchers supported by Jest are [extensively documented here](http://facebook.github.io/jest/docs/expect.html).<br>
 You can also use [`jest.fn()` and `expect(fn).toBeCalled()`](http://facebook.github.io/jest/docs/expect.html#tohavebeencalled) to create “spies” or mock functions.
+=======
+All `expect()` matchers supported by Jest are [extensively documented here](https://facebook.github.io/jest/docs/en/expect.html#content).<br>
+You can also use [`jest.fn()` and `expect(fn).toBeCalled()`](https://facebook.github.io/jest/docs/en/expect.html#tohavebeencalled) to create “spies” or mock functions.
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 ### Testing Components
 
@@ -1344,9 +1410,15 @@ There is a broad spectrum of component testing techniques. They range from a “
 
 Different projects choose different testing tradeoffs based on how often components change, and how much logic they contain. If you haven’t decided on a testing strategy yet, we recommend that you start with creating simple smoke tests for your components:
 
+<<<<<<< HEAD
 ```ts
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+=======
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 import App from './App';
 
 it('renders without crashing', () => {
@@ -1355,19 +1427,28 @@ it('renders without crashing', () => {
 });
 ```
 
+<<<<<<< HEAD
 This test mounts a component and makes sure that it didn’t throw during rendering. Tests like this provide a lot of value with very little effort so they are great as a starting point, and this is the test you will find in `src/App.test.tsx`.
+=======
+This test mounts a component and makes sure that it didn’t throw during rendering. Tests like this provide a lot of value with very little effort so they are great as a starting point, and this is the test you will find in `src/App.test.js`.
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 When you encounter bugs caused by changing components, you will gain a deeper insight into which parts of them are worth testing in your application. This might be a good time to introduce more specific tests asserting specific expected output or behavior.
 
 If you’d like to test components in isolation from the child components they render, we recommend using [`shallow()` rendering API](http://airbnb.io/enzyme/docs/api/shallow.html) from [Enzyme](http://airbnb.io/enzyme/). To install it, run:
 
 ```sh
+<<<<<<< HEAD
 npm install --save-dev enzyme @types/enzyme enzyme-adapter-react-16 @types/enzyme-adapter-react-16 react-test-renderer @types/react-test-renderer
+=======
+npm install --save enzyme enzyme-adapter-react-16 react-test-renderer
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 ```
 
 Alternatively you may use `yarn`:
 
 ```sh
+<<<<<<< HEAD
 yarn add --dev enzyme @types/enzyme enzyme-adapter-react-16 @types/enzyme-adapter-react-16 react-test-renderer @types/react-test-renderer
 ```
 
@@ -1377,14 +1458,34 @@ import * as Enzyme from 'enzyme';
 import * as Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
+=======
+yarn add enzyme enzyme-adapter-react-16 react-test-renderer
+```
+
+As of Enzyme 3, you will need to install Enzyme along with an Adapter corresponding to the version of React you are using. (The examples above use the adapter for React 16.)
+
+The adapter will also need to be configured in your [global setup file](#initializing-test-environment):
+
+#### `src/setupTests.js`
+```js
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 ```
 
 >Note: Keep in mind that if you decide to "eject" before creating `src/setupTests.js`, the resulting `package.json` file won't contain any reference to it. [Read here](#initializing-test-environment) to learn how to add this after ejecting.
 
 Now you can write a smoke test with it:
 
+<<<<<<< HEAD
 ```ts
 import * as React from 'react';
+=======
+```js
+import React from 'react';
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 import { shallow } from 'enzyme';
 import App from './App';
 
@@ -1399,8 +1500,13 @@ You can read the [Enzyme documentation](http://airbnb.io/enzyme/) for more testi
 
 Here is an example from Enzyme documentation that asserts specific output, rewritten to use Jest matchers:
 
+<<<<<<< HEAD
 ```ts
 import * as React from 'react';
+=======
+```js
+import React from 'react';
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 import { shallow } from 'enzyme';
 import App from './App';
 
@@ -1412,7 +1518,11 @@ it('renders welcome message', () => {
 });
 ```
 
+<<<<<<< HEAD
 All Jest matchers are [extensively documented here](http://facebook.github.io/jest/docs/expect.html).<br>
+=======
+All Jest matchers are [extensively documented here](http://facebook.github.io/jest/docs/en/expect.html).<br>
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 Nevertheless you can use a third-party assertion library like [Chai](http://chaijs.com/) if you want to, as described below.
 
 Additionally, you might find [jest-enzyme](https://github.com/blainekasten/enzyme-matchers) helpful to simplify your tests with readable matchers. The above `contains` code can be written more simply with jest-enzyme.
@@ -1433,7 +1543,11 @@ Alternatively you may use `yarn`:
 yarn add jest-enzyme
 ```
 
+<<<<<<< HEAD
 Import it in [`src/setupTests.ts`](#initializing-test-environment) to make its matchers available in every test:
+=======
+Import it in [`src/setupTests.js`](#initializing-test-environment) to make its matchers available in every test:
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 ```js
 import 'jest-enzyme';
@@ -1456,12 +1570,21 @@ and then use them in your tests like you normally do.
 
 >Note: this feature is available with `react-scripts@0.4.0` and higher.
 
+<<<<<<< HEAD
 If your app uses a browser API that you need to mock in your tests or if you just need a global setup before running your tests, add a `src/setupTests.ts` to your project. It will be automatically executed before running your tests.
 
 For example:
 
 #### `src/setupTests.ts`
 ```ts
+=======
+If your app uses a browser API that you need to mock in your tests or if you just need a global setup before running your tests, add a `src/setupTests.js` to your project. It will be automatically executed before running your tests.
+
+For example:
+
+#### `src/setupTests.js`
+```js
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 const localStorageMock = {
   getItem: jest.fn(),
   setItem: jest.fn(),
@@ -1502,7 +1625,10 @@ Supported overrides:
  - [`coverageReporters`](https://facebook.github.io/jest/docs/en/configuration.html#coveragereporters-array-string)
  - [`coverageThreshold`](https://facebook.github.io/jest/docs/en/configuration.html#coveragethreshold-object)
  - [`snapshotSerializers`](https://facebook.github.io/jest/docs/en/configuration.html#snapshotserializers-array-string)
+<<<<<<< HEAD
  - [`moduleNameMapper`](https://facebook.github.io/jest/docs/en/configuration.html#modulenamemapper-object-string-string)
+=======
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 Example package.json:
 
@@ -1524,16 +1650,23 @@ Example package.json:
       }
     },
     "coverageReporters": ["text"],
+<<<<<<< HEAD
     "snapshotSerializers": ["my-serializer-module"],
     "moduleNameMapper": {
       "^~/(.*)$": "<rootDir>/src/$1"
     }
+=======
+    "snapshotSerializers": ["my-serializer-module"]
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
   }
 }
 ```
 
+<<<<<<< HEAD
 Note that customizing the `moduleNameMapper` configuration will override the default (`{ '^react-native$': 'react-native-web' }`).
 
+=======
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 ### Continuous Integration
 
 By default `npm test` runs the watcher with interactive CLI. However, you can force it to run tests once and finish the process by setting an environment variable called `CI`.
@@ -1800,7 +1933,11 @@ By default, the production build is a fully functional, offline-first
 Progressive Web Apps are faster and more reliable than traditional web pages, and provide an engaging mobile experience:
 
  * All static site assets are cached so that your page loads fast on subsequent visits, regardless of network connectivity (such as 2G or 3G). Updates are downloaded in the background.
+<<<<<<< HEAD
  * Your app will work regardless of network state, even if offline. This means your users will be able to use your app at 10,000 feet and on the Subway.
+=======
+ * Your app will work regardless of network state, even if offline. This means your users will be able to use your app at 10,000 feet and on the subway.
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
  * On mobile devices, your app can be added directly to the user's home screen, app icon and all. You can also re-engage users using web **push notifications**. This eliminates the need for the app store.
 
 The [`sw-precache-webpack-plugin`](https://github.com/goldhand/sw-precache-webpack-plugin)
@@ -1814,14 +1951,28 @@ that your web app is reliably fast, even on a slow or unreliable network.
 ### Opting Out of Caching
 
 If you would prefer not to enable service workers prior to your initial
+<<<<<<< HEAD
 production deployment, then remove the call to `serviceWorkerRegistration.register()`
+=======
+production deployment, then remove the call to `registerServiceWorker()`
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 from [`src/index.js`](src/index.js).
 
 If you had previously enabled service workers in your production deployment and
 have decided that you would like to disable them for all your existing users,
+<<<<<<< HEAD
 you can swap out the call to `serviceWorkerRegistration.register()` in
 [`src/index.js`](src/index.js) with a call to `serviceWorkerRegistration.unregister()`.
 After the user visits a page that has `serviceWorkerRegistration.unregister()`,
+=======
+you can swap out the call to `registerServiceWorker()` in
+[`src/index.js`](src/index.js) first by modifying the service worker import:
+```javascript
+import { unregister } from './registerServiceWorker';
+```
+and then call `unregister()` instead.
+After the user visits a page that has `unregister()`,
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 the service worker will be uninstalled. Note that depending on how `/service-worker.js` is served,
 it may take up to 24 hours for the cache to be invalidated.
 
@@ -2017,6 +2168,15 @@ service worker navigation routing can be configured or disabled by
 and [`navigateFallbackWhitelist`](https://github.com/GoogleChrome/sw-precache#navigatefallbackwhitelist-arrayregexp)
 options of the `SWPreachePlugin` [configuration](../config/webpack.config.prod.js).
 
+<<<<<<< HEAD
+=======
+When users install your app to the homescreen of their device the default configuration will make a shortcut to `/index.html`. This may not work for client-side routers which expect the app to be served from `/`. Edit the web app manifest at [`public/manifest.json`](public/manifest.json) and change `start_url` to match the required URL scheme, for example:
+
+```js
+  "start_url": ".",
+```
+
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 ### Building for Relative Paths
 
 By default, Create React App produces a build assuming your app is hosted at the server root.<br>
@@ -2049,6 +2209,7 @@ If you are not using the HTML5 `pushState` history API or not using client-side 
 
 This will make sure that all the asset paths are relative to `index.html`. You will then be able to move your app from `http://mywebsite.com` to `http://mywebsite.com/relativepath` or even `http://mywebsite.com/relative/path` without having to rebuild it.
 
+<<<<<<< HEAD
 ### Azure
 
 See [this](https://medium.com/@to_pe/deploying-create-react-app-on-microsoft-azure-c0f6686a4321) blog post on how to deploy your React app to [Microsoft Azure](https://azure.microsoft.com/).
@@ -2057,6 +2218,15 @@ See [this](https://medium.com/@to_pe/deploying-create-react-app-on-microsoft-azu
 
 See [this](https://medium.com/@strid/host-create-react-app-on-azure-986bc40d5bf2#.pycfnafbg) blog post or [this](https://github.com/ulrikaugustsson/azure-appservice-static) repo for a way to use automatic deployment to Azure App Service.
 
+=======
+### [Azure](https://azure.microsoft.com/)
+
+See [this](https://medium.com/@to_pe/deploying-create-react-app-on-microsoft-azure-c0f6686a4321) blog post on how to deploy your React app to Microsoft Azure.
+
+See [this](https://medium.com/@strid/host-create-react-app-on-azure-986bc40d5bf2#.pycfnafbg) blog post or [this](https://github.com/ulrikaugustsson/azure-appservice-static) repo for a way to use automatic deployment to Azure App Service.
+
+### [Firebase](https://firebase.google.com/)
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 Install the Firebase CLI if you haven’t already by running `npm install -g firebase-tools`. Sign up for a [Firebase account](https://console.firebase.google.com/) and create a new project. Run `firebase login` and login with your previous created Firebase account.
 
@@ -2129,7 +2299,11 @@ Now, after you create a production build with `npm run build`, you can deploy it
 
 For more information see [Add Firebase to your JavaScript Project](https://firebase.google.com/docs/web/setup).
 
+<<<<<<< HEAD
 ### GitHub Pages
+=======
+### [GitHub Pages](https://pages.github.com/)
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 >Note: this feature is available with `react-scripts@0.2.0` and higher.
 
@@ -2218,8 +2392,11 @@ GitHub Pages doesn’t support routers that use the HTML5 `pushState` history AP
 * Alternatively, you can use a trick to teach GitHub Pages to handle 404 by redirecting to your `index.html` page with a special redirect parameter. You would need to add a `404.html` file with the redirection code to the `build` folder before deploying your project, and you’ll need to add code handling the redirect parameter to `index.html`. You can find a detailed explanation of this technique [in this guide](https://github.com/rafrex/spa-github-pages).
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### Heroku
 =======
+=======
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 #### Troubleshooting
 
 ##### "/dev/tty: No such a device or address"
@@ -2231,7 +2408,10 @@ If, when deploying, you get `/dev/tty: No such a device or address` or a similar
 3. Try `npm run deploy again`
 
 ### [Heroku](https://www.heroku.com/)
+<<<<<<< HEAD
 >>>>>>> dfbc71ce2ae07547a8544cce14a1a23fac99e071
+=======
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 Use the [Heroku Buildpack for Create React App](https://github.com/mars/create-react-app-buildpack).<br>
 You can find instructions in [Deploying React with Zero Configuration](https://blog.heroku.com/deploying-react-with-zero-configuration).
@@ -2269,7 +2449,11 @@ remote: npm ERR! argv "/tmp/build_a2875fc163b209225122d68916f1d4df/.heroku/node/
 
 In this case, ensure that the file is there with the proper lettercase and that’s not ignored on your local `.gitignore` or `~/.gitignore_global`.
 
+<<<<<<< HEAD
 ### Netlify
+=======
+### [Netlify](https://www.netlify.com/)
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 **To do a manual deploy to Netlify’s CDN:**
 
@@ -2299,9 +2483,15 @@ To support `pushState`, make sure to create a `public/_redirects` file with the 
 
 When you build the project, Create React App will place the `public` folder contents into the build output.
 
+<<<<<<< HEAD
 ### Now
 
 [now](https://zeit.co/now) offers a zero-configuration single-command deployment. You can use `now` to deploy your app for free.
+=======
+### [Now](https://zeit.co/now)
+
+Now offers a zero-configuration single-command deployment. You can use `now` to deploy your app for free.
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 1. Install the `now` command-line tool either via the recommended [desktop tool](https://zeit.co/download) or via node with `npm install -g now`.
 
@@ -2319,11 +2509,19 @@ When you build the project, Create React App will place the `public` folder cont
 
 Details are available in [this article.](https://zeit.co/blog/unlimited-static)
 
+<<<<<<< HEAD
 ### S3 and CloudFront
 
 See this [blog post](https://medium.com/@omgwtfmarc/deploying-create-react-app-to-s3-or-cloudfront-48dae4ce0af) on how to deploy your React app to Amazon Web Services [S3](https://aws.amazon.com/s3) and [CloudFront](https://aws.amazon.com/cloudfront/).
 
 ### Surge
+=======
+### [S3](https://aws.amazon.com/s3) and [CloudFront](https://aws.amazon.com/cloudfront/)
+
+See this [blog post](https://medium.com/@omgwtfmarc/deploying-create-react-app-to-s3-or-cloudfront-48dae4ce0af) on how to deploy your React app to Amazon Web Services S3 and CloudFront.
+
+### [Surge](https://surge.sh/)
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 
 Install the Surge CLI if you haven’t already by running `npm install -g surge`. Run the `surge` command and log in you or create a new account.
 
@@ -2433,12 +2631,25 @@ This will only work for locales that have been explicitly imported before.
 
 ### `npm run build` fails to minify
 
+<<<<<<< HEAD
 You may occasionally find a package you depend on needs compiled or ships code for a non-browser environment.<br>
 This is considered poor practice in the ecosystem and does not have an escape hatch in Create React App.<br>
 <br>
 To resolve this:
 1. Open an issue on the dependency's issue tracker and ask that the package be published pre-compiled (retaining ES6 Modules).
 2. Fork the package and publish a corrected version yourself.
+=======
+Some third-party packages don't compile their code to ES5 before publishing to npm. This often causes problems in the ecosystem because neither browsers (except for most modern versions) nor some tools currently support all ES6 features. We recommend to publish code on npm as ES5 at least for a few more years.
+
+<br>
+To resolve this:
+
+1. Open an issue on the dependency's issue tracker and ask that the package be published pre-compiled.
+  * Note: Create React App can consume both CommonJS and ES modules. For Node.js compatibility, it is recommended that the main entry point is CommonJS. However, they can optionally provide an ES module entry point with the `module` field in `package.json`. Note that **even if a library provides an ES Modules version, it should still precompile other ES6 features to ES5 if it intends to support older browsers**.
+
+2. Fork the package and publish a corrected version yourself. 
+
+>>>>>>> 0056c211ccf5ea5f097e7c244a93d64ae5052948
 3. If the dependency is small enough, copy it to your `src/` folder and treat it as application code.
 
 In the future, we might start automatically compiling incompatible third-party modules, but it is not currently supported. This approach would also slow down the production builds.

@@ -1,3 +1,7 @@
 .nav {
     background-color: aqua!important;
 }
+
+.nav > a{
+    line-height: 38px;
+}

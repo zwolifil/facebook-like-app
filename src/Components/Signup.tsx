@@ -6,10 +6,10 @@ import './Signup.css';
 
 
 
-class Signup extends React.Component {
+export default class Signup extends React.Component {
 
     private auth = { email: '', pass: '', repPass: ''};
-
+    private myFormRef: HTMLFormElement;
 
     public constructor(props: {}) {
         super(props);
@@ -22,7 +22,7 @@ class Signup extends React.Component {
         return (
             <div className="container" id="main">
                 <h2 className="text-center align-self-center font-weight-bold">Register</h2>
-                <form className="container align-content-center align-self-sm-center">
+                <form ref={(el) => this.myFormRef = el} className="container align-content-center align-self-sm-center" onSubmit={event => {this.onSignupClick(); event.preventDefault(); }}>
                     <div className="form-group">
                         <label>Email</label>
                         <input type="email" onChange={event => {this.auth.email = event.target.value}} className="form-control" placeholder="Type email"/>
@@ -32,14 +32,13 @@ class Signup extends React.Component {
                         <input type="password" onChange={event => {this.auth.repPass = event.target.value}} className="form-control" placeholder="Type password"/>
                     </div>
 
-                    <button type="button" className="btn btn-default" onClick={this.onSignupClick}>Submit</button>
+                    <button type="submit" className="btn btn-default">Submit</button>
                 </form>
             </div>
         );
     }
 
     private onSignupClick() {
-        console.log(this.auth.email);
         if(this.auth.pass !== this.auth.repPass) {
             return;
         }
@@ -47,7 +46,7 @@ class Signup extends React.Component {
         firebase.auth().createUserWithEmailAndPassword(this.auth.email, this.auth.pass).catch(error => {
             // Handle Errors here.
         });
+
+        this.myFormRef.reset();
     }
 }
-
-export default Signup;
