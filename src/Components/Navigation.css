@@ -4,4 +4,9 @@
 
 .nav > a{
     line-height: 38px;
+    text: red;
+}
+
+#btn-nav {
+    margin:0 5px!important;
 }

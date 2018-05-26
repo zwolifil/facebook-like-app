@@ -7,6 +7,11 @@
       "import-sources-order": "any",
       "named-imports-order": "case-insensitive"
     }],
+    "sort-imports": ["error", {
+      "ignoreCase": false,
+      "ignoreMemberSort": false,
+      "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+    }],
     "object-literal-sort-keys": false,
     "no-console": false
   },

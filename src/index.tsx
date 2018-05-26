@@ -1,10 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
+import {browserHistory, Router} from 'react-router';
 import * as firebase from 'firebase';
-import Navigation from './Components/Navigation';
-import Signup from "./Components/Signup";
 
+import Navigation from './Components/Navigation';
+import Routes from './Routes';
 
 const config = {
     apiKey: "AIzaSyBjZui6CTBv9Xc6Epjyyl8zmaKrOO-5C74",
@@ -18,11 +19,10 @@ firebase.initializeApp(config);
 
 interface IState {toRender: string}
 
-class App extends React.Component<{}, IState> {
+export default class App extends React.Component<{}, IState> {
 
     constructor(props: {}) {
         super(props);
-
 
         this.state = {toRender: ""};
     }
@@ -30,11 +30,10 @@ class App extends React.Component<{}, IState> {
     public render() {
         return (
             <div>
-                <Navigation/>
-                <Signup />
+                <Navigation />
             </div>
         );
     }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Router history={browserHistory} routes={Routes} />, document.getElementById('root'));
