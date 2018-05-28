@@ -2,9 +2,10 @@
     background-color: aqua!important;
 }
 
-.nav > a{
+.nav > div > a{
     line-height: 38px;
     text: red;
+    margin-right: 10px;
 }
 
 #btn-nav {

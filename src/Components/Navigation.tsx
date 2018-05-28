@@ -1,4 +1,4 @@
-import * as DOM from 'react-router-dom';
+import {browserHistory, Link, Router} from 'react-router';
 import * as React from 'react';
 import * as firebase from 'firebase';
 
@@ -32,22 +32,30 @@ export default class Navigation extends React.Component<{}, IState> {
     public render() {
         return (
             <div>
-                <div className="nav navbar d-flex flex-row align-items-end ">
+                <div className="nav navbar d-flex flex-row ">
                     {this.state.ifSigned ?
-                        <a>Hello, <b>{this.state.email}</b></a> :
+                        <div className="d-flex flex-row">
+                            <a className="align-middle">Hello, <b>{this.state.email}</b></a>
+                            <div className="d-flex flex-row align-self-center">
+                                <button className="btn btn-primary" onClick={this.onLogoutClick}>Logout</button>
+                            </div>
+                        </div>:
                         <div className="d-flex justify-content-around">
                             <input type="email" onChange={event => {this.setState({email: event.target.value})}} className="form-control" placeholder="Type email"/>
                             <input type="password" onChange={event => {this.setState({pass: event.target.value})}} className="form-control" placeholder="Type password"/>
+                            <div className="d-flex flex-row">
+                                <button id="btn-nav" className="btn btn-primary" onClick={this.onLoginClick}>Login</button>
+                                <Link to="/signup" id="btn-nav" className="btn btn-primary">Register</Link>
+                            </div>
                         </div>
                     }
-                    { this.state.ifSigned ?
-                        <button className="btn btn-default" onClick={this.onLogoutClick}>Logout</button>
-                        :
-                        <div className="d-flex flex-row">
-                        <button id="btn-nav" className="btn btn-default" onClick={this.onLoginClick}>Login</button>
-
-                        </div>
-                    }
+                    <div className="d-flex flex-row">
+                        {this.state.ifSigned ?
+                            <Link to="/profile" id="btn-nav" className="btn btn-primary">Profile</Link> :
+                            ""
+                        }
+                        <Link to="/posts" id="btn-nav" className="btn btn-primary">Posts</Link>
+                    </div>
                 </div>
                 {this.props.children}
             </div>

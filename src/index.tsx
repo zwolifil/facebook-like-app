@@ -3,8 +3,6 @@ import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import {browserHistory, Router} from 'react-router';
 import * as firebase from 'firebase';
-
-import Navigation from './Components/Navigation';
 import Routes from './Routes';
 
 const config = {
@@ -16,24 +14,5 @@ const config = {
     messagingSenderId: "364659637614"
 };
 firebase.initializeApp(config);
-
-interface IState {toRender: string}
-
-export default class App extends React.Component<{}, IState> {
-
-    constructor(props: {}) {
-        super(props);
-
-        this.state = {toRender: ""};
-    }
-
-    public render() {
-        return (
-            <div>
-                <Navigation />
-            </div>
-        );
-    }
-}
 
 ReactDOM.render(<Router history={browserHistory} routes={Routes} />, document.getElementById('root'));

@@ -18,7 +18,7 @@ export default class Signup extends React.Component {
         return (
             <div className="container" id="main">
                 <h2 className="text-center align-self-center font-weight-bold">Register</h2>
-                <form ref={(el) => this.myFormRef = el} className="container align-content-center align-self-sm-center" onSubmit={event => {this.onSignupClick(); event.preventDefault(); }}>
+                <form ref={(el) => this.myFormRef = el} className="container align-content-center align-self-sm-center" onSubmit={this.onSignupClick}>
                     <div className="form-group">
                         <label>Email</label>
                         <input type="email" onChange={event => {this.auth.email = event.target.value}} className="form-control" placeholder="Type email"/>
@@ -34,7 +34,8 @@ export default class Signup extends React.Component {
         );
     }
 
-    private onSignupClick() {
+    private onSignupClick(event) {
+        event.preventDefault();
         if(this.auth.pass !== this.auth.repPass) {
             return;
         }
