@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as firebase from 'firebase';
 
-export default class CreatePost extends React.Component {
+export default class CreatePost extends React.Component<{toParentCallback}> {
 
     private postContent: string;
     private myFormRef: HTMLFormElement;
@@ -39,7 +39,9 @@ export default class CreatePost extends React.Component {
             headers:{
                 'Content-Type': 'application/json'
             }
-        }).then();
+        }).then(_ =>{
+            this.props.toParentCallback(true);
+        });
 
         this.myFormRef.reset();
     }

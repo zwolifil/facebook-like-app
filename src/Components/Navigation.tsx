@@ -49,7 +49,7 @@ export default class Navigation extends React.Component<{}, IState> {
                             </div>
                         </div>
                     }
-                    <div className="d-flex flex-row">
+                    <div className="d-flex flex-row justify-content-around">
                         {this.state.ifSigned ?
                             <Link to="/profile" id="btn-nav" className="btn btn-primary">Profile</Link> :
                             ""
