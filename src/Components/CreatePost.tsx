@@ -25,11 +25,6 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
     private onCreateClick = (event) => {
         event.preventDefault();
 
-        if(!firebase.auth().currentUser) {
-            alert("You're not logged! You can't post!");
-            return;
-        }
-
         fetch('http://localhost:8000/posts', {
             method: 'post',
             body: JSON.stringify({

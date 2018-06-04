@@ -11,8 +11,6 @@ export default class Navigation extends React.Component<{}, IState> {
     public constructor(props: {}) {
         super(props);
 
-        this.onLoginClick = this.onLoginClick.bind(this);
-        this.onLogoutClick = this.onLogoutClick.bind(this);
         this.render = this.render.bind(this);
         this.state = {ifSigned : false, email: "", pass: ""};
     }
@@ -62,16 +60,15 @@ export default class Navigation extends React.Component<{}, IState> {
         );
     }
 
-    private onLogoutClick() {
+    private onLogoutClick = () => {
         firebase.auth().signOut().then(() => {
             this.setState({email: "", pass: ""});
         });
     }
 
-    private onLoginClick() {
+    private onLoginClick = () => {
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass)
-            .catch(error => {
-
+            .catch(() => {
         })
     }
 }

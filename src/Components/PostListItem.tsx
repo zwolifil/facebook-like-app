@@ -3,11 +3,11 @@ import * as React from 'react';
 const PostListItem = ({post}) => {
 
     return (
-            <div className="list-group-item">
-                <div className="card-header text-center font-weight-bold">
+            <div className="list-group-item m-1">
+                <div className="text-left font-weight-bold">
                     {post.author}
                 </div>
-                <div className="card-body text-justify">
+                <div className="card-body text-left pl-0">
                     {post.content}
                 </div>
             </div>
