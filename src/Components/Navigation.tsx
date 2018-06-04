@@ -29,8 +29,8 @@ export default class Navigation extends React.Component<{}, IState> {
 
     public render() {
         return (
-            <div>
-                <div className="nav navbar d-flex flex-row ">
+            <div className="align-items-center">
+                <div className="nav navbar d-flex flex-row container-fluid">
                     {this.state.ifSigned ?
                         <div className="d-flex flex-row">
                             <a className="align-middle">Hello, <b>{this.state.email}</b></a>
@@ -38,15 +38,19 @@ export default class Navigation extends React.Component<{}, IState> {
                                 <button className="btn btn-primary" onClick={this.onLogoutClick}>Logout</button>
                             </div>
                         </div>:
-                        <div className="d-flex justify-content-around">
-                            <input type="email" onChange={event => {this.setState({email: event.target.value})}} className="form-control" placeholder="Type email"/>
-                            <input type="password" onChange={event => {this.setState({pass: event.target.value})}} className="form-control" placeholder="Type password"/>
-                            <div className="d-flex flex-row">
-                                <button id="btn-nav" className="btn btn-primary" onClick={this.onLoginClick}>Login</button>
-                                <Link to="/signup" id="btn-nav" className="btn btn-primary">Register</Link>
+                        <div>
+                            <div className="d-flex justify-content-around">
+                                <input type="email" onChange={event => {this.setState({email: event.target.value})}} className="form-control" placeholder="Type email"/>
+                                <input type="password" onChange={event => {this.setState({pass: event.target.value})}} className="form-control" placeholder="Type password"/>
+                                <div className="d-flex flex-row">
+                                    <button id="btn-nav" className="btn btn-primary" onClick={this.onLoginClick}>Login</button>
+                                    <Link to="/signup" id="btn-nav" className="btn btn-primary">Register</Link>
+                                </div>
                             </div>
+                            <div id="log-alert-child" className="rounded p-1 position-absolute m-auto font-weight-bold" />
                         </div>
-                    }
+
+                            }
                     <div className="d-flex flex-row justify-content-around">
                         {this.state.ifSigned ?
                             <Link to="/profile" id="btn-nav" className="btn btn-primary">Profile</Link> :
@@ -69,6 +73,10 @@ export default class Navigation extends React.Component<{}, IState> {
     private onLoginClick = () => {
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass)
             .catch(() => {
+            document.getElementById("log-alert-child").innerText = "Login or password was invalid!";
+            document.getElementById("log-alert-child").style.display = "inline-block";
+            document.getElementById("log-alert-child").addEventListener("mouseover",
+                () => {document.getElementById("log-alert-child").style.display = "none"})
         })
     }
 }

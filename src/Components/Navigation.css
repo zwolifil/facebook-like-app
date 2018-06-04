@@ -1,5 +1,11 @@
 .nav {
-    background-color: aqua!important;
+    background-color: #9fcdff!important;
+}
+
+#log-alert-child {
+    z-index: 1!important;
+    display: none;
+    background-color: #6c757d!important;
 }
 
 .nav > div > a{
