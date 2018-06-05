@@ -47,10 +47,8 @@ export default class Navigation extends React.Component<{}, IState> {
                                     <Link to="/signup" id="btn-nav" className="btn btn-primary">Register</Link>
                                 </div>
                             </div>
-                            <div id="log-alert-child" className="rounded p-1 position-absolute m-auto font-weight-bold" />
                         </div>
-
-                            }
+                    }
                     <div className="d-flex flex-row justify-content-around">
                         {this.state.ifSigned ?
                             <Link to="/profile" id="btn-nav" className="btn btn-primary">Profile</Link> :
@@ -59,6 +57,7 @@ export default class Navigation extends React.Component<{}, IState> {
                         <Link to="/posts" id="btn-nav" className="btn btn-primary">Posts</Link>
                     </div>
                 </div>
+                <div id="log-alert-child" className="rounded p-1 position-absolute m-auto font-weight-bold" />
                 {this.props.children}
             </div>
         );
@@ -72,11 +71,15 @@ export default class Navigation extends React.Component<{}, IState> {
 
     private onLoginClick = () => {
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass)
+            .then(() => {
+                document.getElementById("log-alert-child").style.display = "none";
+            })
             .catch(() => {
-            document.getElementById("log-alert-child").innerText = "Login or password was invalid!";
-            document.getElementById("log-alert-child").style.display = "inline-block";
-            document.getElementById("log-alert-child").addEventListener("mouseover",
-                () => {document.getElementById("log-alert-child").style.display = "none"})
-        })
+            const x = document.getElementById("log-alert-child");
+            x.innerText = "Login or password was invalid!";
+            x.style.display = "inline-block";
+            x.addEventListener("mouseover",
+                () => {x.style.display = "none"})
+        });
     }
 }

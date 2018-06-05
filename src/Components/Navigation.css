@@ -6,6 +6,7 @@
     z-index: 1!important;
     display: none;
     background-color: #6c757d!important;
+    transition: display 2s linear;
 }
 
 .nav > div > a{

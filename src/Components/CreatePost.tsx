@@ -9,11 +9,10 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
     public render() {
         return (
             <div className="container">
-                <h2 className="text-center align-self-center font-weight-bold">New Post</h2>
+                <h2 className="text-center align-self-center font-weight-bold">New thought</h2>
                 <form ref={(el) => this.myFormRef = el} className="align-content-center w-100" onSubmit={this.onCreateClick} >
                     <div className="form-group">
-                        <label className="align-self-center">Message</label>
-                        <textarea className="form-control" cols={20} rows={10} placeholder="Your thought ..." onChange={event => this.postContent = event.target.value}/>
+                        <textarea className="form-control" cols={19} rows={5} placeholder="Your thought ..." onChange={event => this.postContent = event.target.value}/>
                     </div>
 
                     <button type="submit" className="btn btn-default">Submit</button>

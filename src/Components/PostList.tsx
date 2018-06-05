@@ -41,11 +41,11 @@ export default class PostList extends React.Component<{}, IState> {
         return (
             <div>
                 {this.state.ifSigned ?
-                    <div className="d-flex flex-row container-fluid">
+                    <div className="d-flex flex-column container-fluid">
                         <nav className="flex-fill flex-grow-0"><CreatePost toParentCallback={this.onPostsGet}/></nav>
-                        <div className="flex-fill container align-content-center border-left">
-                            <h2 className="text-center w-100 font-weight-bold">Every thought</h2>
-                            <div id="post-container" className="container-fluid">
+                        <div className="flex-fill container align-content-center">
+                            <h2 className="text-center w-100 font-weight-bold">All thoughts</h2>
+                            <div id="post-container">
                                 {this.state.posts.reverse().map(post => {
                                     return <PostListItem key={post._id} post={post}/>
                                 })}
