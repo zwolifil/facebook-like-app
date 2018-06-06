@@ -31,9 +31,9 @@ export default class Navigation extends React.Component<{}, IState> {
         return (
             <div className="align-items-center">
                 <div className="nav navbar d-flex flex-row container-fluid">
-                    {this.state.ifSigned ?
+                    {firebase.auth().currentUser ?
                         <div className="d-flex flex-row">
-                            <a className="align-middle">Hello, <b>{this.state.email}</b></a>
+                            <a className="align-middle">Hello, <b>{firebase.auth().currentUser.displayName}</b></a>
                             <div className="d-flex flex-row align-self-center">
                                 <button className="btn btn-primary" onClick={this.onLogoutClick}>Logout</button>
                             </div>
