@@ -9,7 +9,7 @@ const PostListItem = ({post}) => {
                     {post.author}
                 </div>
                 {post.title !== "" ?
-                    <img src={'${post.title}'} height="42" width="42"/>
+                    <img src={post.title}/>
                     :
                     ""
                 }

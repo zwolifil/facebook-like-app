@@ -51,7 +51,7 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
         fetch('http://localhost:8000/posts', {
             method: 'post',
             body: JSON.stringify({
-                title: "../Images/" + this.file.name,
+                title: "/Images/" + this.file.name,
                 content: this.postContent,
                 author: firebase.auth().currentUser.displayName
             }),

@@ -29,6 +29,7 @@ export default class Signup extends React.Component {
                     </div>
 
                     <button type="submit" className="btn btn-default">Submit</button>
+                    <div id="log-alert-child-signup" className="rounded p-1 position-absolute m-auto font-weight-bold" />
                 </form>
             </div>
         );
@@ -37,11 +38,24 @@ export default class Signup extends React.Component {
     private onSignupClick(event) {
         event.preventDefault();
         if(this.auth.pass !== this.auth.repPass) {
+            const x = document.getElementById("log-alert-child-signup");
+            x.innerText = "Passwords doesn't match!";
+            x.style.display = "inline-block";
+            x.addEventListener("mouseover",
+                () => {x.style.display = "none"});
             return;
         }
 
-        firebase.auth().createUserWithEmailAndPassword(this.auth.email, this.auth.pass).catch(error => {
-            // Handle Errors here.
+        firebase.auth().createUserWithEmailAndPassword(this.auth.email, this.auth.pass)
+            .then( () => {
+                document.getElementById("log-alert-child-signup").style.display = "none";
+            })
+            .catch(() => {
+                const x = document.getElementById("log-alert-child-signup");
+                x.innerText = "Login or password was invalid!";
+                x.style.display = "inline-block";
+                x.addEventListener("mouseover",
+                    () => {x.style.display = "none"})
         });
 
         this.myFormRef.reset();
