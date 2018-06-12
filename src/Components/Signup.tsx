@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as firebase from 'firebase';
-import './Signup.css';
+import './Signup.scss';
 
 export default class Signup extends React.Component {
 

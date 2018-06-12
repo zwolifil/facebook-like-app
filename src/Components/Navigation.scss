@@ -1,14 +1,31 @@
+$back-clr : rgba(12,54,255,0.4);
+
 .nav{
-  background-color: aqua!important;
+  background-color: $back-clr!important;
   div {
+
     a {
       line-height: 38px;
       text: red;
       margin-right: 10px;
     }
+
   }
+}
+
+#nav {
+  position: sticky!important;
 }
 
 #btn-nav {
   margin:0 5px!important;
+  padding-top: 0!important;
+  padding-bottom: 0!important;
+  background-color: inherit!important;
+  border: none!important;
+  outline: none!important;
+
+  &:hover{
+    background-color: rgba(250,250,250,0.2)!important;
+  }
 }

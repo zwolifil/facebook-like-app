@@ -18,12 +18,14 @@ interface IState {
 
 export default class PostList extends React.Component<{}, IState> {
 
+    private hash: string;
+
     public constructor(props) {
         super(props);
         this.state = {posts: [], ifSigned: false};
 
         this.render = this.render.bind(this);
-        this.onPostsGet();
+        this.onPostsGet(false);
     }
 
     public componentDidMount() {
@@ -39,15 +41,14 @@ export default class PostList extends React.Component<{}, IState> {
 
     public render() {
         return (
-            <div>
+            <div id="parent-posts">
                 {this.state.ifSigned ?
                     <div className="d-flex flex-column container-fluid">
-                        <nav className="flex-fill flex-grow-0"><CreatePost toParentCallback={this.onPostsGet}/></nav>
-                        <div className="flex-fill container align-content-center">
-                            <h2 className="text-center w-100 font-weight-bold">All thoughts</h2>
+                        <nav className="flex-fill flex-grow-0 pt-3"><CreatePost toParentCallback={this.onPostsGet}/></nav>
+                        <div className="flex-fill container align-content-center pt-3">
                             <div id="post-container">
                                 {this.state.posts.reverse().map(post => {
-                                    return <PostListItem key={post._id} post={post}/>
+                                    return <PostListItem key={post._id} post={post} toParentCallback={this.onPostsGet}/>
                                 })}
                             </div>
                         </div>
@@ -59,14 +60,28 @@ export default class PostList extends React.Component<{}, IState> {
         );
     }
 
-    private onPostsGet = () => {
-        fetch('http://localhost:8000/posts')
-            .then(postsResponse => postsResponse.json())
-            .then(postsData=> {
-                this.setState({
-                    posts: postsData
+    private onPostsGet = (hash) => {
+        if(hash) {
+            fetch('http://localhost:8000/posts')
+                .then(postsResponse => postsResponse.json())
+                .then(postsData => {
+                    postsData = postsData.filter(post => {
+                       post.content.includes(hash)
+                    });
+                    this.setState({
+                        posts: postsData
+                    });
                 });
-            });
+        }
+        else {
+            fetch('http://localhost:8000/posts')
+                .then(postsResponse => postsResponse.json())
+                .then(postsData => {
+                    this.setState({
+                        posts: postsData
+                    });
+                });
+        }
     }
 
 
