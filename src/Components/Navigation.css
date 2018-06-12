@@ -1,20 +1,9 @@
 .nav {
-    background-color: #9fcdff!important;
-}
-
-#log-alert-child {
-    z-index: 1!important;
-    display: none;
-    background-color: #6c757d!important;
-    transition: display 2s linear;
-}
-
-.nav > div > a{
+  background-color: aqua !important; }
+  .nav div a {
     line-height: 38px;
     text: red;
-    margin-right: 10px;
-}
+    margin-right: 10px; }
 
 #btn-nav {
-    margin:0 5px!important;
-}
+  margin: 0 5px !important; }

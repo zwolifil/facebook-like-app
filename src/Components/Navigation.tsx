@@ -2,7 +2,7 @@ import {browserHistory, Link, Router} from 'react-router';
 import * as React from 'react';
 import * as firebase from 'firebase';
 
-import './Navigation.css';
+import './Navigation.scss';
 
 interface IState {ifSigned: boolean, email: string, pass: string}
 
