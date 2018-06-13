@@ -23,7 +23,7 @@ export default class PostList extends React.Component<{}, IState> {
     public constructor(props) {
         super(props);
         this.state = {posts: [], ifSigned: false};
-
+        this.onPostsGet = this.onPostsGet.bind(this);
         this.render = this.render.bind(this);
         this.onPostsGet(false);
     }
@@ -60,14 +60,18 @@ export default class PostList extends React.Component<{}, IState> {
         );
     }
 
-    private onPostsGet = (hash) => {
+    private onPostsGet(hash){
         if(hash) {
             fetch('http://localhost:8000/posts')
-                .then(postsResponse => postsResponse.json())
+                .then(postsResponse => {
+                    console.log(postsResponse);
+                    return postsResponse.json()
+                })
                 .then(postsData => {
-                    postsData = postsData.filter(post => {
+                    console.log('check');
+                    postsData = postsData.filter(post =>
                        post.content.includes(hash)
-                    });
+                    );
                     this.setState({
                         posts: postsData
                     });
@@ -82,7 +86,7 @@ export default class PostList extends React.Component<{}, IState> {
                     });
                 });
         }
-    }
+    };
 
 
 }
