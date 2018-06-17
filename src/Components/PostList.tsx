@@ -4,7 +4,7 @@ import CreatePost from './CreatePost';
 import PostListItem from "./PostListItem";
 
 interface IPost {
-    title: string,
+    image: string,
     content: string,
     author: string,
     _id: string,

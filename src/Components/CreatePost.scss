@@ -1,0 +1,68 @@
+.setPost {
+  background-color: white;
+
+  .form-group {
+    border: none!important;
+    margin-bottom: 0;
+
+    textarea {
+      border: none!important;
+    }
+
+    hr {
+      margin-top: 0;
+      width: 98%;
+    }
+  }
+
+  .inputFile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+
+    & + label {
+      font-size: 1.05em;
+      font-weight: 700;
+      color: #d3394c;
+      display: inline-block;
+      cursor: pointer;
+
+      svg {
+        padding-right: 2%;
+        color: #d3394c;
+      }
+
+      &:hover {
+        color: #722040;
+      }
+    }
+  }
+
+  .btn-wrap {
+
+
+    .btn {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+
+      & + label {
+        font-size: 1.05em;
+        font-weight: 700;
+        color: #d3394c;
+        display: inline-block;
+        cursor: pointer;
+
+        &:hover {
+          color: #722040;
+        }
+      }
+    }
+  }
+}

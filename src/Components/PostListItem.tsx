@@ -16,14 +16,14 @@ const PostListItem = ({post, toParentCallback}) => {
                 <div className="card-body text-left pl-0">
                     {post.content}
                 </div>
-                {post.title !== "" ?
+                {post.image !== "" ?
                     <div id="parent">
-                        <ModalImage className={"img-responsive"} small={post.title} large={post.title} />
+                        <ModalImage className={"img-responsive"} small={post.image} large={post.image} />
                     </div>
                     :
                     ""
                 }
-                <div className="d-flex flex-row">
+                <div className="d-flex flex-row hash-div">
                     {FindHashtags(post.content).map(hash => {
                         return <a className="page-link" key={hash} onClick={function a(){toParentCallback(hash)}}>{hash}</a>
                     })}
