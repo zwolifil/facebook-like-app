@@ -17,6 +17,7 @@ export default class Navigation extends React.Component<{}, IState> {
 
     public componentDidMount(): void {
 
+
         firebase.auth().onAuthStateChanged( function (user) {
             if(user) {
                 this.setState( {ifSigned: true, email: firebase.auth().currentUser.email});
@@ -52,7 +53,7 @@ export default class Navigation extends React.Component<{}, IState> {
                             <Link to="/profile" id="btn-nav" className="btn btn-primary font-weight-bold">Profile</Link> :
                             ""
                         }
-                        <Link to="/posts" id="btn-nav" className="btn btn-primary font-weight-bold">Posts</Link>
+                        <Link to={{pathname : "/posts", state: {hash : true}}} id="btn-nav" className="btn btn-primary font-weight-bold">Posts</Link>
                     </div>
                 </div>
                 <div id="log-alert-child" className="rounded p-1 position-absolute m-auto font-weight-bold" />

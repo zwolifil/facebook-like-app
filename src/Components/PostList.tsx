@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as firebase from 'firebase';
+import { RouteProps } from 'react-router';
 import CreatePost from './CreatePost';
 import PostListItem from "./PostListItem";
 
@@ -16,9 +17,7 @@ interface IState {
     ifSigned: boolean
 }
 
-export default class PostList extends React.Component<{}, IState> {
-
-    private hash: string;
+export default class PostList extends React.Component<{location}, IState> {
 
     public constructor(props) {
         super(props);
@@ -47,7 +46,11 @@ export default class PostList extends React.Component<{}, IState> {
                         <nav className="flex-fill flex-grow-0 pt-3"><CreatePost toParentCallback={this.onPostsGet}/></nav>
                         <div className="flex-fill container align-content-center pt-3">
                             <div id="post-container">
-                                {this.state.posts.reverse().map(post => {
+                                {
+                                    this.props.location.state ? this.onPostsGet(false) : ""
+                                }
+                                {
+                                    this.state.posts.reverse().map(post => {
                                     return <PostListItem key={post._id} post={post} toParentCallback={this.onPostsGet}/>
                                 })}
                             </div>
@@ -61,20 +64,20 @@ export default class PostList extends React.Component<{}, IState> {
     }
 
     private onPostsGet(hash){
+        this.props.location.state = undefined;
         if(hash) {
             fetch('http://localhost:8000/posts')
                 .then(postsResponse => {
-                    console.log(postsResponse);
                     return postsResponse.json()
                 })
                 .then(postsData => {
-                    console.log('check');
                     postsData = postsData.filter(post =>
                        post.content.includes(hash)
                     );
                     this.setState({
                         posts: postsData
                     });
+                    hash = false;
                 });
         }
         else {

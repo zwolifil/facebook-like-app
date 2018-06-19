@@ -25,7 +25,7 @@ const PostListItem = ({post, toParentCallback}) => {
                 }
                 <div className="d-flex flex-row hash-div">
                     {FindHashtags(post.content).map(hash => {
-                        return <a className="page-link" key={hash} onClick={function a(){toParentCallback(hash)}}>{hash}</a>
+                        return <Link className="page-link" key={hash} onClick={function a(){toParentCallback(hash)}}>{hash}</Link>
                     })}
                 </div>
             </div>
