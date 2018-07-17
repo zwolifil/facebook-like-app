@@ -1,31 +1,25 @@
 $back-clr : rgba(12,54,255,0.4);
 
-.nav{
-  background-color: $back-clr!important;
-  div {
+.navigation-bar{
+  height: 60px;
+  background-color: $back-clr;
 
-    a {
-      line-height: 38px;
-      text: red;
-      margin-right: 10px;
-    }
-
+  .user-greeting {
+    display: flex;
+    align-items: center
   }
-}
 
-#nav {
-  position: sticky!important;
-}
+  .navigation-button {
+    height: 30px;
+    margin:0 5px;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: inherit;
+    border: none;
+    outline: none;
 
-#btn-nav {
-  margin:0 5px!important;
-  padding-top: 0!important;
-  padding-bottom: 0!important;
-  background-color: inherit!important;
-  border: none!important;
-  outline: none!important;
-
-  &:hover{
-    background-color: rgba(250,250,250,0.2)!important;
+    &:hover{
+      background-color: rgba(250,250,250,0.2);
+    }
   }
 }

@@ -31,29 +31,29 @@ export default class Navigation extends React.Component<{}, IState> {
     public render() {
         return (
             <div className="align-items-center">
-                <div id="nav" className="nav navbar d-flex flex-row container-fluid">
+                <div id="nav" className="nav navbar d-flex flex-row container-fluid navigation-bar">
                     {firebase.auth().currentUser ?
                         <div className="d-flex flex-row">
-                            <a className="align-middle">Hello, <b>{firebase.auth().currentUser.displayName}</b></a>
-                            <button id="btn-nav" className="btn btn-primary font-weight-bold" onClick={this.onLogoutClick}>Logout</button>
+                            <a className="align-middle user-greeting">Hello, <b>{firebase.auth().currentUser.displayName}</b></a>
+                            <button id="btn-nav" className="btn btn-primary font-weight-bold navigation-button user-greeting" onClick={this.onLogoutClick}>Logout</button>
                         </div>:
                         <div>
                             <div id="login-form" className="d-flex justify-content-around">
                                 <input type="email" onChange={event => {this.setState({email: event.target.value})}} className="form-control" placeholder="Type email"/>
                                 <input type="password" onChange={event => {this.setState({pass: event.target.value})}} className="form-control" placeholder="Type password"/>
-                                <div className="d-flex flex-row">
-                                    <button id="btn-nav" className="btn btn-primary font-weight-bold" onClick={this.onLoginClick}>Login</button>
-                                    <Link to="/signup" id="btn-nav" className="btn btn-primary font-weight-bold">Register</Link>
+                                <div className="d-flex flex-row align-items-center">
+                                    <button id="btn-nav" className="btn btn-primary font-weight-bold navigation-button user-greeting" onClick={this.onLoginClick}>Login</button>
+                                    <Link to="/signup" id="btn-nav" className="btn btn-primary font-weight-bold navigation-button user-greeting">Register</Link>
                                 </div>
                             </div>
                         </div>
                     }
                     <div className="d-flex flex-row justify-content-around">
                         {this.state.ifSigned ?
-                            <Link to="/profile" id="btn-nav" className="btn btn-primary font-weight-bold">Profile</Link> :
+                            <Link to="/profile" id="btn-nav" className="btn btn-primary font-weight-bold navigation-button user-greeting">Profile</Link> :
                             ""
                         }
-                        <Link to={{pathname : "/posts", state: {hash : true}}} id="btn-nav" className="btn btn-primary font-weight-bold">Posts</Link>
+                        <Link to={{pathname : "/posts", state: {hash : true}}} id="btn-nav" className="btn btn-primary font-weight-bold navigation-button user-greeting">Posts</Link>
                     </div>
                 </div>
                 <div id="log-alert-child" className="rounded p-1 position-absolute m-auto font-weight-bold" />

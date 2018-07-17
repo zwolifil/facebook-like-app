@@ -2,18 +2,20 @@
   background-color: white;
 
   .form-group {
-    border: none!important;
+    border: none;
     margin-bottom: 0;
-
-    textarea {
-      border: none!important;
-    }
 
     hr {
       margin: 0 auto;
       width: 98%;
     }
+
+    .form-control:focus {
+      outline: none;
+    }
   }
+
+
 
   .inputFile {
     width: 0.1px;
