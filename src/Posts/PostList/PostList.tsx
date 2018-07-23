@@ -1,8 +1,9 @@
 import * as React from 'react';
 import * as firebase from 'firebase';
 import { RouteProps } from 'react-router';
-import CreatePost from './CreatePost';
-import PostListItem from "./PostListItem";
+import Authorization from '../../Authorization';
+import CreatePost from '../CreatePost/CreatePost';
+import PostListItem from "../PostListItem/PostListItem";
 
 interface IPost {
     image: string,
@@ -24,21 +25,22 @@ export default class PostList extends React.Component<{location}, IState> {
         this.state = {posts: [], ifSigned: false};
         this.onPostsGet = this.onPostsGet.bind(this);
         this.render = this.render.bind(this);
-        this.onPostsGet(false);
     }
 
     public componentDidMount() {
         firebase.auth().onAuthStateChanged( function (user) {
             if(user) {
                 this.setState({ifSigned: true});
+                this.onPostsGet(false);
             }
             else {
-                this.setState({ifSigned: false});
+                this.setState({ifSigned: false, posts: []});
             }
         }.bind(this));
     }
 
     public render() {
+
         return (
             <div id="parent-posts">
                 {this.state.ifSigned ?

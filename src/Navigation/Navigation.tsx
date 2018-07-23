@@ -1,4 +1,5 @@
 import {browserHistory, Link, Router} from 'react-router';
+import Authorization from '../Authorization';
 import * as React from 'react';
 import * as firebase from 'firebase';
 
@@ -16,8 +17,6 @@ export default class Navigation extends React.Component<{}, IState> {
     }
 
     public componentDidMount(): void {
-
-
         firebase.auth().onAuthStateChanged( function (user) {
             if(user) {
                 this.setState( {ifSigned: true, email: firebase.auth().currentUser.email});
@@ -72,13 +71,14 @@ export default class Navigation extends React.Component<{}, IState> {
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass)
             .then(() => {
                 document.getElementById("log-alert-child").style.display = "none";
+                Authorization.getToken();
             })
             .catch(() => {
-            const x = document.getElementById("log-alert-child");
-            x.innerText = "Login or password was invalid!";
-            x.style.display = "inline-block";
-            x.addEventListener("mouseover",
-                () => {x.style.display = "none"})
-        });
+                const x = document.getElementById("log-alert-child");
+                x.innerText = "Login or password was invalid!";
+                x.style.display = "inline-block";
+                x.addEventListener("mouseover",
+                    () => {x.style.display = "none"})
+            });
     }
 }
