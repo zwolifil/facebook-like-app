@@ -16,15 +16,15 @@ export default class Signup extends React.Component {
 
     public render() {
         return (
-            <div className="container" id="main">
+            <div className="container main">
                 <h2 className="text-center align-self-center font-weight-bold">Register</h2>
-                <form ref={(el) => this.myFormRef = el} className="container align-content-center align-self-sm-center" onSubmit={this.onSignupClick}>
+                <form ref={(el) => this.myFormRef = el} className="container align-content-center align-self-sm-center signup-form" onSubmit={this.onSignupClick}>
                     <div className="form-group">
-                        <label>Email</label>
+                        <label className="signup-form-label">Email</label>
                         <input type="email" onChange={event => {this.auth.email = event.target.value}} className="form-control" placeholder="Type email"/>
-                        <label>Password</label>
+                        <label className="signup-form-label">Password</label>
                         <input type="password" onChange={event => {this.auth.pass = event.target.value}} className="form-control" placeholder="Type password" />
-                        <label>Repeat password</label>
+                        <label className="signup-form-label">Repeat password</label>
                         <input type="password" onChange={event => {this.auth.repPass = event.target.value}} className="form-control" placeholder="Type password"/>
                     </div>
 

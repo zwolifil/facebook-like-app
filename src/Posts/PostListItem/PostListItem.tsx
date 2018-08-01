@@ -17,7 +17,7 @@ const PostListItem = ({post, toParentCallback}) => {
                     {post.content}
                 </div>
                 {post.image !== "" ?
-                    <div id="parent">
+                    <div className="parent">
                         <ModalImage className={"img-responsive"} small={post.image} large={post.image} />
                     </div>
                     :

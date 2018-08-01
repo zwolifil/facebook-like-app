@@ -5,7 +5,7 @@
     border: none;
     margin-bottom: 0;
 
-    hr {
+    .create-post-hr{
       margin: 0 auto;
       width: 98%;
     }
@@ -15,36 +15,32 @@
     }
   }
 
+  .btn-wrap {
+    .inputFile {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
 
-
-  .inputFile {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-
-    & + label {
-      font-size: 1.05em;
-      font-weight: 700;
-      color: #d3394c;
-      display: inline-block;
-      cursor: pointer;
-
-      svg {
-        padding-right: 2%;
+      & + .input-file-icon-wrap {
+        font-size: 1.05em;
+        font-weight: 700;
         color: #d3394c;
-      }
+        display: inline-block;
+        cursor: pointer;
 
-      &:hover {
-        color: #722040;
+        .input-file-icon {
+          padding-right: 2%;
+          color: #d3394c;
+        }
+
+        &:hover {
+          color: #722040;
+        }
       }
     }
-  }
-
-  .btn-wrap {
-
 
     .btn {
       width: 0.1px;
@@ -54,7 +50,7 @@
       position: absolute;
       z-index: -1;
 
-      & + label {
+      & + .submit-btn-text {
         font-size: 1.05em;
         font-weight: 700;
         color: #d3394c;

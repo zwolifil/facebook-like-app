@@ -5,7 +5,7 @@ import Authorization from '../../Authorization';
 import CreatePost from '../CreatePost/CreatePost';
 import PostListItem from "../PostListItem/PostListItem";
 
-interface IPost {
+export interface IPost {
     image: string,
     content: string,
     author: string,
@@ -31,7 +31,7 @@ export default class PostList extends React.Component<{location}, IState> {
         firebase.auth().onAuthStateChanged( function (user) {
             if(user) {
                 this.setState({ifSigned: true});
-                this.onPostsGet(false);
+                this.onPostsGet();
             }
             else {
                 this.setState({ifSigned: false, posts: []});
@@ -42,18 +42,18 @@ export default class PostList extends React.Component<{location}, IState> {
     public render() {
 
         return (
-            <div id="parent-posts">
+            <div className="parent-posts">
                 {this.state.ifSigned ?
                     <div className="d-flex flex-column container-fluid">
-                        <nav className="flex-fill flex-grow-0 pt-3"><CreatePost toParentCallback={this.onPostsGet}/></nav>
+                        <nav className="flex-fill flex-grow-0 pt-3"><CreatePost toParentCallback={this.onCreateNewPost}/></nav>
                         <div className="flex-fill container align-content-center pt-3">
                             <div id="post-container">
                                 {
-                                    this.props.location.state ? this.onPostsGet(false) : ""
+                                    this.props.location.state ? this.onPostsGet() : ""
                                 }
                                 {
                                     this.state.posts.reverse().map(post => {
-                                    return <PostListItem key={post._id} post={post} toParentCallback={this.onPostsGet}/>
+                                    return <PostListItem key={post._id} post={post} toParentCallback={this.onGetHashedPost}/>
                                 })}
                             </div>
                         </div>
@@ -65,33 +65,35 @@ export default class PostList extends React.Component<{location}, IState> {
         );
     }
 
-    private onPostsGet(hash){
+    private onPostsGet(){
+        fetch('http://localhost:8000/posts')
+            .then(postsResponse => postsResponse.json())
+            .then(postsData => {
+                this.setState({
+                    posts: postsData
+                });
+            });
+    };
+
+    private onGetHashedPost = hash => {
         this.props.location.state = undefined;
         if(hash) {
-            fetch('http://localhost:8000/posts')
-                .then(postsResponse => {
-                    return postsResponse.json()
-                })
-                .then(postsData => {
-                    postsData = postsData.filter(post =>
-                       post.content.includes(hash)
+            let postsData = this.state.posts;
+            postsData = postsData.filter(post =>
+                        post.content.includes(hash)
                     );
-                    this.setState({
-                        posts: postsData
-                    });
-                    hash = false;
-                });
-        }
-        else {
-            fetch('http://localhost:8000/posts')
-                .then(postsResponse => postsResponse.json())
-                .then(postsData => {
-                    this.setState({
-                        posts: postsData
-                    });
-                });
+            this.setState({
+                posts: postsData
+            });
+            hash = false;
         }
     };
+
+    private onCreateNewPost = newPost => {
+        const tmpPosts = this.state.posts;
+        tmpPosts.unshift(newPost);
+        this.setState({posts: tmpPosts.reverse()});
+    }
 
 
 }

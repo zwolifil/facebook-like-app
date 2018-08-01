@@ -1,12 +1,13 @@
-form {
-  width: 50%!important;
-}
 
-#main {
+.main {
   padding-top: 25px!important;
   font-family: "DejaVu Math TeX Gyre";
-}
 
-label {
-  margin-top: 10px!important;
+  .signup-form {
+    width: 50%!important;
+
+    .signup-form-label {
+      margin-top: 10px!important;
+    }
+  }
 }
