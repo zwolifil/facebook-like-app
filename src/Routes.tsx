@@ -5,12 +5,15 @@ import Signup from './Signup/Signup';
 import PostList from './Posts/PostList/PostList';
 import Navigation from "./Navigation/Navigation";
 import Profile from "./Profile/Profile";
+import Profiles from "./Profile/Profiles/Profiles";
 
 
-export default (
-    <Route exact={true} path="/" render={history.pushState(this, 'redirection', '/posts')} component={Navigation} >
-        <Route path="posts" component={PostList} />
-        <Route path="signup" component={Signup} />
-        <Route path="profile" component={Profile} />
-    </Route>
-);
+
+export default(
+        <Route exact={true} path="/" render={history.pushState(this, 'redirection', '/posts')} component={Navigation}>
+            <Route path="posts" component={PostList} />
+            <Route path="signup" component={Signup}/>
+            <Route path="profile" component={Profile}/>
+            <Route path="profiles/:id" component={Profiles}/>
+        </Route>
+    );

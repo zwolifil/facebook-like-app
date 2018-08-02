@@ -1,8 +1,17 @@
-.parent{
-  display: block;
-  margin: auto;
-}
+.list-group-item {
 
-.hash-div {
-  margin-top: 20px;
+  .headline {
+    .avatar-logo {
+      margin-right: 1%;
+    }
+  }
+
+  .parent {
+    display: block;
+    margin: auto;
+  }
+
+  .hash-div {
+    margin-top: 20px;
+  }
 }

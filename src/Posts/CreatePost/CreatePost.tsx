@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as firebase from 'firebase';
-import {IPost} from "../PostList/PostList";
 import './CreatePost.scss';
 
 export default class CreatePost extends React.Component<{toParentCallback}> {

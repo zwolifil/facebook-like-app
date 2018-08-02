@@ -6,7 +6,8 @@ $back-clr : rgba(12,54,255,0.4);
 
   .user-greeting {
     display: flex;
-    align-items: center
+    align-items: center;
+    align-self: center;
   }
 
   .navigation-button {
