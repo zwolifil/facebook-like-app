@@ -74,7 +74,7 @@ export default class PostList extends React.Component<{location, CallbackToParen
                                 {
                                     RoutingData.posts ? RoutingData.posts.map(post => {
                                     return <PostListItem key={post._id} post={post} profile={
-                                        RoutingData.profiles.find((profile) => profile.name === post.author)
+                                        RoutingData.profiles.find((profile) => profile._id === post._idProfile)
                                     } toParentCallback={this.onGetHashedPost}/>
                                 }) : ""
                                 }

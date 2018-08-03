@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as firebase from 'firebase';
 import './CreatePost.scss';
+import {RoutingData} from "../../RoutingData";
 
 export default class CreatePost extends React.Component<{toParentCallback}> {
 
@@ -62,13 +63,15 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
             this.onSendPost({
                 image: "/Images/" + this.file.name,
                 content: this.postContent,
-                author: firebase.auth().currentUser.displayName
+                author: firebase.auth().currentUser.displayName,
+                _idProfile: RoutingData.myProfile._id
             });
 
         } else {
             this.onSendPost({
                 content: this.postContent,
-                author: firebase.auth().currentUser.displayName
+                author: firebase.auth().currentUser.displayName,
+                _idProfile: RoutingData.myProfile._id
             });
         }
 

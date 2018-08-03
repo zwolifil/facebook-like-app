@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as firebase from 'firebase';
 import './Signup.scss';
+import {RoutingData} from "../RoutingData";
 
 export default class Signup extends React.Component {
 
@@ -66,19 +67,26 @@ export default class Signup extends React.Component {
                     photoURL: "/Images/" + this.auth.avatar
                 });
 
+                const myProfile = {
+                    name: this.auth.name,
+                    description: this.auth.description,
+                    avatar: this.auth.avatar,
+                    _id: firebase.auth().currentUser.uid
+                };
+
                 fetch('http://localhost:8000/profiles', {
                     method: 'post',
-                    body: JSON.stringify({
-                        name: this.auth.name,
-                        description: this.auth.description,
-                        avatar: this.auth.avatar
-                    }),
+                    body: JSON.stringify(myProfile),
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 }).then((postResponse) => postResponse.json())
                     .then(postData => {
                     });
+
+                RoutingData.setMyProfile(myProfile);
+                RoutingData.profiles.push(myProfile);
+                this.myFormRef.reset();
             })
             .catch(() => {
                 const x = document.getElementById("log-alert-child-signup");
@@ -88,6 +96,5 @@ export default class Signup extends React.Component {
                     () => {x.style.display = "none"})
         });
 
-        this.myFormRef.reset();
     }
 }

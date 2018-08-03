@@ -1,6 +1,7 @@
 {
   "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
   "rules": {
+    "no-shadowed-variable": true,
     "no-shadow": ["error", { "builtinGlobals": false, "hoist": "functions", "allow": [] }],
     "no-empty": false,
     "jsx-no-lambda": false,

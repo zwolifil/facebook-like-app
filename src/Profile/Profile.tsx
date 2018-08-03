@@ -1,54 +1,42 @@
 import * as React from 'react';
 import * as firebase from 'firebase';
-import {browserHistory} from 'react-router';
+import {browserHistory, Router} from 'react-router';
 import './Profile.scss';
+import {RoutingData} from "../RoutingData";
 
 export default class Profile extends React.Component{
 
     private name: string;
     private email: string;
     private pass: string;
-
+    private description: string;
     private avatarFile;
 
-    private myNameRef: HTMLFormElement;
-    private myMailRef: HTMLFormElement;
-    private myPassRef: HTMLFormElement;
+    private myRef: HTMLFormElement;
 
     public render() {
         return(
             <div className="container">
-                <h2 className="text-center align-self-center font-weight-bold">Update name</h2>
-                <form ref={(el) => this.myNameRef = el} className="container align-content-center align-self-sm-center" onSubmit={this.onUpdateNameClick}>
+                <form ref={(el) => this.myRef = el} className="container align-content-center align-self-sm-center" onSubmit={this.onUpdateClick}>
+                    <h2 className="text-center align-self-center font-weight-bold">Update name</h2>
                     <div className="form-group">
                         <label>Name</label>
                         <input type="text" onChange={event => {this.name = event.target.value}} className="form-control" placeholder="Type name"/>
                     </div>
 
-                    <button type="submit" className="btn btn-default">Submit</button>
-                </form>
-                <h2 className="text-center align-self-center font-weight-bold">Update email</h2>
-                <form ref={(el) => this.myMailRef = el} className="container align-content-center align-self-sm-center" onSubmit={this.onUpdateEmailClick}>
+                    <h2 className="text-center align-self-center font-weight-bold">Update email</h2>
                     <div className="form-group">
                         <label>Email</label>
                         <input type="email" onChange={event => {this.email = event.target.value}} className="form-control" placeholder="Type email" />
                     </div>
 
-                    <button type="submit" className="btn btn-default">Submit</button>
-                </form>
-
-                <h2 className="text-center align-self-center font-weight-bold">Update password</h2>
-                <form ref={(el) => this.myPassRef = el} className="container align-content-center align-self-sm-center" onSubmit={this.onUpdatePassClick}>
+                    <h2 className="text-center align-self-center font-weight-bold">Update password</h2>
                     <div className="form-group">
                         <label>Password</label>
                         <input type="password" onChange={event => {this.pass = event.target.value}} className="form-control" placeholder="Type password"/>
                     </div>
 
-                    <button type="submit" className="btn btn-default">Submit</button>
-                </form>
-
-                <h2 className="text-center align-self-center font-weight-bold">Add Avatar</h2>
-                <form ref={(el) => this.myPassRef = el} className="container align-content-center align-self-sm-center" onSubmit={this.onUpdateAvatarClick}>
+                    <h2 className="text-center align-self-center font-weight-bold">Add Avatar</h2>
                     <div className="form-group">
                         <input type="file" name="file" id="file" className="inputFile" accept="image/*" onChange={this.handleFileUpload}/>
                         <label htmlFor="file" className="input-file-icon-wrap">
@@ -56,6 +44,12 @@ export default class Profile extends React.Component{
                                 <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
                             </svg>
                         </label>
+                    </div>
+
+                    <h2 className="text-center align-self-center font-weight-bold">Add Description</h2>
+                    <div className="form-group">
+                        <label>Description</label>
+                        <input type="text" onChange={event => {this.description = event.target.value}} className="form-control" placeholder="Type something about yourself"/>
                     </div>
 
                     <button type="submit" className="btn btn-default">Submit</button>
@@ -66,60 +60,94 @@ export default class Profile extends React.Component{
 
     private handleFileUpload = ( event ) => {
         this.avatarFile = event.target.files[0];
-
     }
 
-    private onUpdateNameClick = (event) => {
+    private onUpdateClick = (event) => {
         event.preventDefault();
 
-        firebase.auth().currentUser.updateProfile({
-            displayName: this.name,
-            photoURL: null
-        });
+        const canReload = [false, false, false, false];
+        const myProfile = RoutingData.myProfile;
 
-        this.myNameRef.reset();
+        if(this.name) {
+            firebase.auth().currentUser.updateProfile({
+                displayName: this.name,
+                photoURL: firebase.auth().currentUser.photoURL
+            }).then(() => canReload[0] = true);
+            myProfile.name = this.name;
+            this.onPostsUpdate(myProfile);
+        } else {
+            canReload[0] = true;
+        }
+
+        if(this.email) {
+            firebase.auth().currentUser.updateEmail(
+                this.email
+            ).then(() => canReload[1] = true);
+        } else {
+            canReload[1] = true;
+        }
+
+        if(this.pass) {
+            firebase.auth().currentUser.updatePassword(
+                this.pass
+            ).then(() => canReload[2] = true);
+        } else {
+            canReload[2] = true;
+        }
+
+        if(this.avatarFile) {
+            firebase.auth().currentUser.updateProfile({
+                displayName: firebase.auth().currentUser.displayName,
+                photoURL: "/Images/" + this.avatarFile.name
+            }).then(() => canReload[3] = true);
+
+            const data = new FormData();
+            data.append('file', this.avatarFile);
+
+            fetch('http://localhost:8000/images', {
+                method: 'post',
+                body: data
+            })
+                .catch(error => console.log(error.message));
+
+            myProfile.avatar = this.avatarFile.name;
+        } else {
+            canReload[3] = true;
+        }
+
+        if(this.description) {
+            myProfile.description = this.description;
+        }
+
+        fetch('http://localhost:8000/profiles/' + myProfile._id, {
+            method: 'put',
+            body: JSON.stringify(myProfile),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((postResponse) => postResponse.json())
+            .then(postData => {
+            });
+        this.myRef.reset();
+
+        if(!canReload.every(value => value)) {
+        }
     }
 
-    private onUpdateEmailClick = (event) => {
-        event.preventDefault();
+    private onPostsUpdate(myProfile) {
+        RoutingData.posts.filter(post => post._idProfile === myProfile._id).map(post => {
+            fetch('http://localhost:8000/posts/' + post._id, {
+                method: 'put',
+                body: JSON.stringify({name: myProfile.name}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then((postResponse) => postResponse.json())
+                .then(postData => {
+                });
 
-        firebase.auth().currentUser.updateEmail(
-            this.email
-        );
-
-        this.myMailRef.reset();
-    }
-
-    private onUpdatePassClick = (event) => {
-        event.preventDefault();
-
-        firebase.auth().currentUser.updatePassword(
-            this.pass
-        );
-
-        this.myPassRef.reset();
-    }
-
-    private onUpdateAvatarClick = (event) => {
-        event.preventDefault();
-
-        firebase.auth().currentUser.updateProfile({
-            displayName: firebase.auth().currentUser.displayName,
-            photoURL: "/Images/" + this.avatarFile.name
-        });
-
-        console.log(firebase.auth().currentUser.photoURL);
-
-        const data = new FormData();
-        data.append('file', this.avatarFile);
-
-        fetch('http://localhost:8000/images', {
-            method: 'post',
-            body: data
+            post.author = myProfile.name;
         })
-            .catch(error => console.log(error.message));
-
-        this.myNameRef.reset();
     }
 
 }

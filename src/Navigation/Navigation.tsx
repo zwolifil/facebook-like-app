@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as firebase from 'firebase';
 
 import './Navigation.scss';
+import {RoutingData} from "../RoutingData";
 
 interface IState {ifSigned: boolean, email: string, pass: string}
 
@@ -72,7 +73,7 @@ export default class Navigation extends React.Component<{}, IState> {
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass)
             .then(() => {
                 document.getElementById("log-alert-child").style.display = "none";
-                Authorization.getToken();
+                RoutingData.setMyProfile(RoutingData.profiles.find(profile => profile._id === firebase.auth().currentUser.uid));
             })
             .catch(() => {
                 const x = document.getElementById("log-alert-child");
