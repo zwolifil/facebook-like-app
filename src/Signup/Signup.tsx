@@ -71,7 +71,8 @@ export default class Signup extends React.Component {
                     name: this.auth.name,
                     description: this.auth.description,
                     avatar: this.auth.avatar,
-                    _id: firebase.auth().currentUser.uid
+                    _id: firebase.auth().currentUser.uid,
+                    images: []
                 };
 
                 fetch('http://localhost:8000/profiles', {

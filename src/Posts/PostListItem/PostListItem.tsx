@@ -10,7 +10,7 @@ const PostListItem = ({post, profile, toParentCallback}) => {
     return (
             <div className="list-group-item m-1 d-flex flex-column align-content-center">
                 <div className="text-left font-weight-bold headline">
-                    <Link to={{pathname : "/profiles/" + profile._id, state: {name: profile.name, description: profile.description, avatar: profile.avatar}}}>
+                    <Link to={{pathname : "/profiles/" + profile._id, state: {name: profile.name, description: profile.description, avatar: profile.avatar, images: profile.images}}}>
                         <img className="avatar-logo" src={"/Images/" + profile.avatar} height={40} width={40} />
                     </Link>
                     {post.author}

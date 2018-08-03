@@ -11,6 +11,7 @@ export default class Profile extends React.Component{
     private pass: string;
     private description: string;
     private avatarFile;
+    private Files;
 
     private myRef: HTMLFormElement;
 
@@ -38,7 +39,17 @@ export default class Profile extends React.Component{
 
                     <h2 className="text-center align-self-center font-weight-bold">Add Avatar</h2>
                     <div className="form-group">
-                        <input type="file" name="file" id="file" className="inputFile" accept="image/*" onChange={this.handleFileUpload}/>
+                        <input type="file" name="avatarfile" id="avatarfile" className="inputFile" accept="image/*" onChange={this.handleAvatarFileUpload}/>
+                        <label htmlFor="avatarfile" className="input-file-icon-wrap">
+                            <svg className="input-file-icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 20 17">
+                                <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
+                            </svg>
+                        </label>
+                    </div>
+
+                    <h2 className="text-center align-self-center font-weight-bold">Add New Images</h2>
+                    <div className="form-group">
+                        <input type="file" name="file" id="file" className="inputFile" accept="image/*" multiple={true} onChange={this.handleFileUpload}/>
                         <label htmlFor="file" className="input-file-icon-wrap">
                             <svg className="input-file-icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 20 17">
                                 <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
@@ -58,48 +69,45 @@ export default class Profile extends React.Component{
         );
     }
 
-    private handleFileUpload = ( event ) => {
+    private handleAvatarFileUpload = ( event ) => {
         this.avatarFile = event.target.files[0];
+    }
+
+    private handleFileUpload = ( event ) => {
+        this.Files = event.target.files;
     }
 
     private onUpdateClick = (event) => {
         event.preventDefault();
 
-        const canReload = [false, false, false, false];
         const myProfile = RoutingData.myProfile;
 
         if(this.name) {
             firebase.auth().currentUser.updateProfile({
                 displayName: this.name,
                 photoURL: firebase.auth().currentUser.photoURL
-            }).then(() => canReload[0] = true);
+            })
             myProfile.name = this.name;
             this.onPostsUpdate(myProfile);
-        } else {
-            canReload[0] = true;
         }
 
         if(this.email) {
             firebase.auth().currentUser.updateEmail(
                 this.email
-            ).then(() => canReload[1] = true);
-        } else {
-            canReload[1] = true;
+            )
         }
 
         if(this.pass) {
             firebase.auth().currentUser.updatePassword(
                 this.pass
-            ).then(() => canReload[2] = true);
-        } else {
-            canReload[2] = true;
+            )
         }
 
         if(this.avatarFile) {
             firebase.auth().currentUser.updateProfile({
                 displayName: firebase.auth().currentUser.displayName,
                 photoURL: "/Images/" + this.avatarFile.name
-            }).then(() => canReload[3] = true);
+            })
 
             const data = new FormData();
             data.append('file', this.avatarFile);
@@ -111,12 +119,16 @@ export default class Profile extends React.Component{
                 .catch(error => console.log(error.message));
 
             myProfile.avatar = this.avatarFile.name;
-        } else {
-            canReload[3] = true;
         }
 
         if(this.description) {
             myProfile.description = this.description;
+        }
+
+        if(this.Files !== []) {
+            for(const file of this.Files) {
+                myProfile.images.push(file.name);
+            }
         }
 
         fetch('http://localhost:8000/profiles/' + myProfile._id, {
@@ -129,9 +141,6 @@ export default class Profile extends React.Component{
             .then(postData => {
             });
         this.myRef.reset();
-
-        if(!canReload.every(value => value)) {
-        }
     }
 
     private onPostsUpdate(myProfile) {

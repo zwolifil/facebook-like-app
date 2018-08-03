@@ -31,6 +31,8 @@
     "react": "^16.4.0",
     "react-dev-utils": "^5.0.1",
     "react-dom": "^16.4.0",
+    "react-grid-gallery": "^0.5.1",
+    "react-images": "^0.5.19",
     "react-modal-image": "^2.1.4",
     "react-router": "^3.2.1",
     "react-router-dom": "^4.2.2",
