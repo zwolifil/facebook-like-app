@@ -3,6 +3,7 @@ import * as firebase from "firebase";
 export class RoutingData{
     public static profiles;
     public static posts;
+    public static hashedPosts;
     public static myProfile;
 
     public static getProfiles(profiles) {
@@ -10,6 +11,10 @@ export class RoutingData{
         this.myProfile = profiles.filter(profile => profile._id === firebase.auth().currentUser.uid)[0];
         console.log(firebase.auth());
         console.log(this.myProfile);
+    }
+
+    public static setHashedPosts(posts) {
+        this.hashedPosts = posts;
     }
 
     public static getPosts(posts) {

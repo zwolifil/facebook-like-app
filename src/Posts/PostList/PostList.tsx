@@ -95,6 +95,7 @@ export default class PostList extends React.Component<{location, CallbackToParen
             .then(postsResponse => postsResponse.json())
             .then(postsData => {
                 RoutingData.getPosts(postsData.reverse());
+                RoutingData.setHashedPosts(RoutingData.posts);
                 this.setState({
                     posts: postsData
                 });
@@ -116,10 +117,12 @@ export default class PostList extends React.Component<{location, CallbackToParen
     private onGetHashedPost = hash => {
         this.props.location.state = undefined;
         if(hash) {
+            RoutingData.getPosts(RoutingData.hashedPosts);
             let postsData = RoutingData.posts;
             postsData = postsData.filter(post =>
                         post.content.includes(hash)
                     );
+            RoutingData.setHashedPosts(RoutingData.posts);
             RoutingData.getPosts(postsData);
             this.setState({posts: this.state.posts});
             hash = false;
