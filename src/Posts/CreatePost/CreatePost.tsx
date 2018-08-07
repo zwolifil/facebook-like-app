@@ -41,12 +41,12 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
     }
 
     private uploadDocumentRequest = file => {
-        const data = new FormData();
-        data.append('file', file);
+        const uploadFiles = new FormData();
+        uploadFiles.append('imgUploader', file);
 
         fetch('http://localhost:8000/images', {
             method: 'post',
-            body: data
+            body: uploadFiles
         })
         .catch(error => console.log(error.message));
 
