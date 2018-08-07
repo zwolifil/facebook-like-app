@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {browserHistory} from 'react-router';
 import Lightbox from 'react-images';
-import Gallery from 'react-photo-gallery';
+import Gallery from '../Gallery/Gallery';
 
 import './Profiles.scss';
 
@@ -10,17 +10,6 @@ export default class Profiles extends React.Component<{location}, {isOpen, curre
 
     public constructor(props) {
         super(props);
-        // this.props.location.state.images.map( image => this.IMAGES.push({src: "/Images/" + image,
-        //     thumbnail: "/Images/" + image,
-        //     thumbnailWidth: 320,
-        //     thumbnailHeight: 212}));
-        // const images = [];
-        // for(const image of this.props.location.state.images) {
-        //     images.push({src: "/Images/" + image,
-        //         thumbnail: "/Images/" + image,
-        //         thumbnailWidth: 320,
-        //         thumbnailHeight: 212})
-        // }
         this.state = {
             isOpen: false,
             current: 0,
@@ -30,9 +19,10 @@ export default class Profiles extends React.Component<{location}, {isOpen, curre
 
     public componentDidMount() {
         const images = [];
+        let i = 0;
         for(const image of this.props.location.state.images) {
             images.push({src: "/Images/" + image,
-                thumbnail: "/Images/" + image,
+                key: i++,
                 width: 320,
                 height: 212})
         }
@@ -54,10 +44,9 @@ export default class Profiles extends React.Component<{location}, {isOpen, curre
                     <img src={"/Images/" + location.state.avatar} className="mr-1" height={60} width={60} />
                     <h2>{location.state.name}</h2>
                 </div>
-                <hr className="profile-hr" />
                 <div className="text-left mt-3 w-50 profile-description"><p>{location.state.description}</p></div>
-                <div className="w-50 mt-3">
-                    <Gallery photos={images} className="d-flex justify-content-center" onClick={this.openLightbox} />
+                <div className="w-75 mt-3">
+                    <Gallery images={images} onClick={this.openLightbox} />
                     <Lightbox
                         images={images}
                         isOpen={isOpen}
@@ -71,9 +60,9 @@ export default class Profiles extends React.Component<{location}, {isOpen, curre
         );
     }
 
-    private openLightbox = (event, obj) => {
+    private openLightbox = (index) => {
         this.setState({
-            current: obj.index,
+            current: index,
             isOpen: true,
         });
     }

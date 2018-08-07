@@ -1,0 +1,10 @@
+.main-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+
+  .gallery-image {
+    margin: 2px;
+    cursor: pointer;
+  }
+}
