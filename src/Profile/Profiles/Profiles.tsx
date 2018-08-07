@@ -4,6 +4,7 @@ import Lightbox from 'react-images';
 import Gallery from '../Gallery/Gallery';
 
 import './Profiles.scss';
+import {RoutingData} from "../../RoutingData";
 
 
 export default class Profiles extends React.Component<{location}, {isOpen, current, images}>{
@@ -39,15 +40,23 @@ export default class Profiles extends React.Component<{location}, {isOpen, curre
             current
         } = this.state;
         return(
-            <div className="container-fluid d-flex flex-column align-items-center">
+            <div className="container-fluid d-flex flex-column align-items-center mb-5">
                 <div className="d-flex flex-row align-items-center justify-content-start w-50 mt-5">
-                    <img src={"/Images/" + location.state.avatar} className="mr-1" height={60} width={60} />
+                    {!location.state.avatar.ifPrivate || location.state._id === RoutingData.myProfile._id ?
+                        <img src={"/Images/" + location.state.avatar.image} className="mr-1" height={60} width={60} />
+                        :
+                        ""
+                    }
                     <h2>{location.state.name}</h2>
                 </div>
-                <div className="text-left mt-3 w-50 profile-description"><p>{location.state.description}</p></div>
+                <div className="text-left mt-3 w-50 profile-description">
+                    <h4>About me</h4>
+                    <p>{location.state.description}</p>
+                </div>
                 <div className="w-75 mt-3">
-                    <Gallery images={images} onClick={this.openLightbox} />
+                    <Gallery images={images} onImageClick={this.openLightbox} />
                     <Lightbox
+                        backdropClosesModal={true}
                         images={images}
                         isOpen={isOpen}
                         onClickPrev={this.onPrevClick}

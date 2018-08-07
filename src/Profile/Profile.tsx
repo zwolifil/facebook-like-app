@@ -11,7 +11,7 @@ export default class Profile extends React.Component{
     private email: string;
     private pass: string;
     private description: string;
-    private avatarFile;
+    private avatarFile = {image: undefined, ifPrivate: undefined};
     private Files;
 
     private myRef: HTMLFormElement;
@@ -46,6 +46,10 @@ export default class Profile extends React.Component{
                                 <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
                             </svg>
                         </label>
+                        <form>
+                            <input type="radio" name="access" value="private" onClick={this.onRadioPrivateClick}/> Private<br/>
+                            <input type="radio" name="access" value="public" onClick={this.onRadioPublicClick}/> Public
+                        </form>
                     </div>
 
                     <h2 className="text-center align-self-center font-weight-bold">Add New Images</h2>
@@ -70,8 +74,16 @@ export default class Profile extends React.Component{
         );
     }
 
+    private onRadioPrivateClick = () => {
+        this.avatarFile.ifPrivate = true;
+    }
+
+    private onRadioPublicClick = () => {
+        this.avatarFile.ifPrivate = false;
+    }
+
     private handleAvatarFileUpload = ( event ) => {
-        this.avatarFile = event.target.files[0];
+        this.avatarFile.image = event.target.files[0];
     }
 
     private handleFileUpload = ( event ) => {
@@ -104,14 +116,19 @@ export default class Profile extends React.Component{
             )
         }
 
-        if(this.avatarFile) {
+
+        if(this.avatarFile.ifPrivate !== undefined) {
+            myProfile.avatar = {image: RoutingData.myProfile.avatar.image, ifPrivate: this.avatarFile.ifPrivate};
+        }
+
+        if(this.avatarFile.image) {
             firebase.auth().currentUser.updateProfile({
                 displayName: firebase.auth().currentUser.displayName,
-                photoURL: "/Images/" + this.avatarFile.name
+                photoURL: "/Images/" + this.avatarFile.image.name
             })
 
             const data = new FormData();
-            data.append('imgUploader', this.avatarFile);
+            data.append('imgUploader', this.avatarFile.image);
 
             fetch('http://localhost:8000/images', {
                 method: 'post',
@@ -119,8 +136,9 @@ export default class Profile extends React.Component{
             })
                 .catch(error => console.log(error.message));
 
-            myProfile.avatar = this.avatarFile.name;
+            myProfile.avatar = {image: this.avatarFile.image.name, ifPrivate: this.avatarFile.ifPrivate};
         }
+
 
         if(this.description) {
             myProfile.description = this.description;
