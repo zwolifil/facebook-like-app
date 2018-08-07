@@ -22,10 +22,14 @@ export default class Profiles extends React.Component<{location}, {isOpen, curre
         const images = [];
         let i = 0;
         for(const image of this.props.location.state.images) {
-            images.push({src: "/Images/" + image,
-                key: i++,
-                width: 320,
-                height: 212})
+            if(!image.ifPrivate || RoutingData.myProfile._id === this.props.location.state._id) {
+                images.push({
+                    src: "/Images/" + image.image,
+                    key: i++,
+                    width: 320,
+                    height: 212
+                })
+            }
         }
         this.setState({images});
     }
