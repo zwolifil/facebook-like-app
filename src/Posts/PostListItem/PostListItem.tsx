@@ -2,6 +2,7 @@ import * as React from 'react';
 import ModalImage from 'react-modal-image';
 import FindHashtags from 'find-hashtags';
 import {Link} from 'react-router';
+import Images from '../../Images/Images';
 
 import "./PostListItem.scss";
 import {RoutingData} from "../../RoutingData";
@@ -26,7 +27,7 @@ const PostListItem = ({post, profile, toParentCallback}) => {
                 </div>
                 {post.image !== "" ?
                     <div className="parent">
-                        <ModalImage className={"img-responsive"} small={post.image} large={post.image} />
+                        <Images small={post.image} large={post.image} />
                     </div>
                     :
                     ""
