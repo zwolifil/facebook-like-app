@@ -21,8 +21,14 @@ interface IProfile {
     __v: number
 }
 
+interface IImage {
+    url: string,
+    uid: string
+}
+
 interface IState {
     posts: IPost[],
+    images: IImage[],
     profiles: IProfile[],
     loading: boolean,
     ifSigned: boolean
@@ -34,7 +40,7 @@ export default class PostList extends React.Component<{location, CallbackToParen
 
     public constructor(props) {
         super(props);
-        this.state = {posts: [], profiles: [], loading: true, ifSigned: false};
+        this.state = {posts: [], images: [], profiles: [], loading: true, ifSigned: false};
         this.onPostsGet = this.onPostsGet.bind(this);
         this.onProfilesGet = this.onProfilesGet.bind(this);
         this.render = this.render.bind(this);
@@ -48,6 +54,8 @@ export default class PostList extends React.Component<{location, CallbackToParen
                 this.onProfilesGet();
                 // noinspection JSPotentiallyInvalidUsageOfClassThis
                 this.onPostsGet();
+                this.onImagesGet();
+                this.onCommentsGet();
             }
             else {
                 this.setState({ifSigned: false, posts: [], profiles: []});
@@ -101,6 +109,23 @@ export default class PostList extends React.Component<{location, CallbackToParen
                 });
             });
     };
+
+    private onImagesGet = () => {
+        fetch('http://localhost:8000/images')
+            .then(postsResponse => postsResponse.json())
+            .then(postsData => {
+                RoutingData.setImages(postsData);
+                this.setState({images: postsData});
+            });
+    }
+
+    private onCommentsGet = () => {
+        fetch('http://localhost:8000/comments')
+            .then(postsResponse => postsResponse.json())
+            .then(postsData => {
+                RoutingData.setComments(postsData);
+            });
+    }
 
     private onProfilesGet(){
         fetch('http://localhost:8000/profiles')

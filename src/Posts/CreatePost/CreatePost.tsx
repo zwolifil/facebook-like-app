@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as firebase from 'firebase';
 import './CreatePost.scss';
 import {RoutingData} from "../../RoutingData";
+import {throws} from "assert";
 
 export default class CreatePost extends React.Component<{toParentCallback}> {
 
@@ -12,7 +13,7 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
     public render() {
         return (
             <div className="container">
-                <form ref={(el) => this.myFormRef = el} className="align-content-center w-100 setPost" onSubmit={this.onCreateClick} >
+                <form ref={(el) => this.myFormRef = el} className="align-content-center w-100 setPost" >
                     <div className="form-group">
                         <textarea className="form-control" cols={19} rows={5} placeholder="Your thought ..." onChange={event => this.postContent = event.target.value}/>
                         <hr className="create-post-hr" />
@@ -25,7 +26,7 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
                             </svg>
                         </label>
 
-                        <button type="submit" id="submit" className="btn">Submit</button>
+                        <button id="submit" className="btn" onClick={this.onCreateClick}>Submit</button>
                         <label htmlFor="submit" className="submit-btn-text">
                             Create
                         </label>
@@ -37,7 +38,6 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
 
     private handleFileUpload = ( event ) => {
         this.file = event.target.files[0];
-
     }
 
     private uploadDocumentRequest = file => {
@@ -47,9 +47,17 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
         fetch('http://localhost:8000/images', {
             method: 'post',
             body: uploadFiles
-        })
-        .catch(error => console.log(error.message));
-
+        }).then(response => response.json())
+            .then(data => {
+                this.onSendPost({
+                    image: data.uid,
+                    content: this.postContent,
+                    author: firebase.auth().currentUser.displayName,
+                    _idProfile: RoutingData.myProfile._id
+                });
+                RoutingData.images.push(data);
+            })
+        .catch(error => throws(error));
     }
 
     private onCreateClick = (event) => {
@@ -59,13 +67,6 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
             this.uploadDocumentRequest(
                 this.file
             );
-
-            this.onSendPost({
-                image: "/Images/" + this.file.name,
-                content: this.postContent,
-                author: firebase.auth().currentUser.displayName,
-                _idProfile: RoutingData.myProfile._id
-            });
 
         } else {
             this.onSendPost({

@@ -3,7 +3,7 @@ import * as firebase from 'firebase';
 import {browserHistory, Router} from 'react-router';
 import './Profile.scss';
 import {RoutingData} from "../RoutingData";
-import CreatePost from "../Posts/CreatePost/CreatePost";
+import {throws} from "assert";
 
 export default class Profile extends React.Component{
 
@@ -139,16 +139,18 @@ export default class Profile extends React.Component{
                 photoURL: "/Images/" + this.avatarFile.image.name
             })
 
-            const data = new FormData();
-            data.append('imgUploader', this.avatarFile.image);
+            const imageForm = new FormData();
+            imageForm.append('imgUploader', this.avatarFile.image);
 
             fetch('http://localhost:8000/images', {
                 method: 'post',
-                body: data
-            })
-                .catch(error => console.log(error.message));
-
-            myProfile.avatar = {image: this.avatarFile.image.name, ifPrivate: this.avatarFile.ifPrivate};
+                body: imageForm
+            }).then(response => response.json())
+                .then(data => {
+                    RoutingData.images.push(data);
+                    myProfile.avatar = {image: data.uid, ifPrivate: this.avatarFile.ifPrivate};
+                })
+                .catch(error => throws(error));
         }
 
 
@@ -158,14 +160,18 @@ export default class Profile extends React.Component{
 
         if(this.Files.image) {
             myProfile.images.push({image: this.Files.image.name, ifPrivate: this.Files.ifPrivate});
-            const data = new FormData();
-            data.append('imgUploader', this.Files.image);
+            const imageForm = new FormData();
+            imageForm.append('imgUploader', this.Files.image);
 
             fetch('http://localhost:8000/images', {
                 method: 'post',
-                body: data
-            })
-                .catch(error => console.log(error.message));
+                body: imageForm
+            }).then(response => response.json())
+                .then(data => {
+                    RoutingData.images.push(data);
+                    myProfile.images.push({image: data.uid, ifPrivate: this.Files.ifPrivate});
+                })
+                .catch(error => throws(error));
         }
 
         fetch('http://localhost:8000/profiles/' + myProfile._id, {

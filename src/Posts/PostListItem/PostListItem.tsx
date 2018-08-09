@@ -1,5 +1,4 @@
 import * as React from 'react';
-import ModalImage from 'react-modal-image';
 import FindHashtags from 'find-hashtags';
 import {Link} from 'react-router';
 import Images from '../../Images/Images';
@@ -14,8 +13,8 @@ const PostListItem = ({post, profile, toParentCallback}) => {
                 <div className="text-left font-weight-bold headline">
                     <Link to={{pathname : "/profiles/" + profile._id, state: {_id: profile._id, name: profile.name, description: profile.description, avatar: profile.avatar, images: profile.images}}}>
                         {!profile.avatar.ifPrivate || profile._id === RoutingData.myProfile._id ?
-                            <img className="avatar-logo" src={"/Images/" + profile.avatar.image} height={40}
-                                 width={40}/>
+                            (RoutingData.images ? <img className="avatar-logo" src={RoutingData.images.find(image => image.uid === profile.avatar.image).url} height={40}
+                                 width={40}/> : "" )
                             :
                             ""
                         }
@@ -25,9 +24,10 @@ const PostListItem = ({post, profile, toParentCallback}) => {
                 <div className="card-body text-left pl-0">
                     {post.content}
                 </div>
-                {post.image !== "" ?
+                {RoutingData.images ?
                     <div className="parent">
-                        <Images small={post.image} large={post.image} />
+                        <Images small={RoutingData.images.find(image => image.uid === post.image).url} large={RoutingData.images.find(image => image.uid === post.image).url}
+                                index={RoutingData.images.find(image => image.uid === post.image).uid} smallImageStyle={"small-image-post"} post={post} />
                     </div>
                     :
                     ""
