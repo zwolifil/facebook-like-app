@@ -48,13 +48,13 @@ export default class Images extends React.Component<{small, large, post, smallIm
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <input ref={(el) => this.myInputRef = el} type="text" className="input-group-text m-2" placeholder="Write comment" onChange={event => {this.comment = event.target.value}} />
-                            <button className='submit-btn-text' onClick={this.onCommentClick}>Send</button>
-                            <div className="comment-section list-group-item" >
+                            <button className='btn btn-primary' onClick={this.onCommentClick}>Send</button>
+                            <div className="comment-section" >
                                 {
                                     !filteredComments.length ?
                                         <p className="if-nothing-element">Be first to comment</p>
                                             :
-                                        filteredComments.map(comment => {
+                                        filteredComments.reverse().map(comment => {
                                             return <Comment key={comment._id} comment={comment.content} profile={comment.profile} />
                                         })
                                 }

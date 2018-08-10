@@ -1,8 +1,14 @@
 .comment-parent {
-
   width: 100%;
+  margin-bottom: 5px;
 
-  .headline {
+  .comment-content {
+    margin: 5px 0;
+  }
+
+  .link-content {
+    clear: both;
+    
     .avatar-logo {
       margin-right: 1%;
     }
