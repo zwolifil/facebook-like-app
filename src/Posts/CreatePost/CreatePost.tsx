@@ -57,7 +57,7 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
                 });
                 RoutingData.images.push(data);
             })
-        .catch(error => throws(error));
+        .catch(error => console.log(error));
     }
 
     private onCreateClick = (event) => {

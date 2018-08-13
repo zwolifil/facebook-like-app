@@ -11,7 +11,7 @@ export default class Profile extends React.Component{
     private email: string;
     private pass: string;
     private description: string;
-    private avatarFile = {image: undefined, ifPrivate: undefined};
+    private avatarFile = undefined;
     private Files = {image: undefined, ifPrivate: undefined};
 
     private myRef: HTMLFormElement;
@@ -46,10 +46,6 @@ export default class Profile extends React.Component{
                                 <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
                             </svg>
                         </label>
-                        <form>
-                            <input type="radio" name="access" value="private" onClick={this.onAvatarPrivateClick}/> Private<br/>
-                            <input type="radio" name="access" value="public" onClick={this.onAvatarPublicClick}/> Public
-                        </form>
                     </div>
 
                     <h2 className="text-center align-self-center font-weight-bold">Add New Images</h2>
@@ -78,14 +74,6 @@ export default class Profile extends React.Component{
         );
     }
 
-    private onAvatarPrivateClick = () => {
-        this.avatarFile.ifPrivate = true;
-    }
-
-    private onAvatarPublicClick = () => {
-        this.avatarFile.ifPrivate = false;
-    }
-
     private onGalleryPrivateClick = () => {
         this.Files.ifPrivate = true;
     }
@@ -95,7 +83,7 @@ export default class Profile extends React.Component{
     }
 
     private handleAvatarFileUpload = ( event ) => {
-        this.avatarFile.image = event.target.files[0];
+        this.avatarFile = event.target.files[0];
     }
 
     private handleFileUpload = ( event ) => {
@@ -128,19 +116,10 @@ export default class Profile extends React.Component{
             )
         }
 
-
-        if(this.avatarFile.ifPrivate !== undefined) {
-            myProfile.avatar = {image: RoutingData.myProfile.avatar.image, ifPrivate: this.avatarFile.ifPrivate};
-        }
-
-        if(this.avatarFile.image) {
-            firebase.auth().currentUser.updateProfile({
-                displayName: firebase.auth().currentUser.displayName,
-                photoURL: "/Images/" + this.avatarFile.image.name
-            })
+        if(this.avatarFile) {
 
             const imageForm = new FormData();
-            imageForm.append('imgUploader', this.avatarFile.image);
+            imageForm.append('imgUploader', this.avatarFile);
 
             fetch('http://localhost:8000/images', {
                 method: 'post',
@@ -148,9 +127,13 @@ export default class Profile extends React.Component{
             }).then(response => response.json())
                 .then(data => {
                     RoutingData.images.push(data);
-                    myProfile.avatar = {image: data.uid, ifPrivate: this.avatarFile.ifPrivate};
+                    myProfile.avatar = data.uid;
+                    firebase.auth().currentUser.updateProfile({
+                        displayName: firebase.auth().currentUser.displayName,
+                        photoURL: "http://localhost:8000/images/" + data.uid
+                    });
                 })
-                .catch(error => throws(error));
+                .catch(error => console.log(error));
         }
 
 
@@ -159,7 +142,6 @@ export default class Profile extends React.Component{
         }
 
         if(this.Files.image) {
-            myProfile.images.push({image: this.Files.image.name, ifPrivate: this.Files.ifPrivate});
             const imageForm = new FormData();
             imageForm.append('imgUploader', this.Files.image);
 
@@ -170,19 +152,20 @@ export default class Profile extends React.Component{
                 .then(data => {
                     RoutingData.images.push(data);
                     myProfile.images.push({image: data.uid, ifPrivate: this.Files.ifPrivate});
+                    fetch('http://localhost:8000/profiles/' + myProfile._id, {
+                        method: 'put',
+                        body: JSON.stringify(myProfile),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then((postResponse) => postResponse.json())
+                        .then(postData => {
+                        });
                 })
                 .catch(error => throws(error));
         }
 
-        fetch('http://localhost:8000/profiles/' + myProfile._id, {
-            method: 'put',
-            body: JSON.stringify(myProfile),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((postResponse) => postResponse.json())
-            .then(postData => {
-            });
+
 
         this.myRef.reset();
     }

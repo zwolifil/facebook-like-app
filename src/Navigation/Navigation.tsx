@@ -1,5 +1,4 @@
 import {browserHistory, Link, Router} from 'react-router';
-import Authorization from '../Authorization';
 import * as React from 'react';
 import * as firebase from 'firebase';
 
@@ -34,7 +33,7 @@ export default class Navigation extends React.Component<{}, IState> {
                 <div id="nav" className="nav navbar d-flex flex-row container-fluid navigation-bar">
                     {firebase.auth().currentUser ?
                         <div className="d-flex flex-row justify-content-around">
-                            <img src={firebase.auth().currentUser.photoURL} height={40} width={40} className="mr-2" />
+                            {/*<img src={firebase.auth().currentUser.photoURL} height={40} width={40} className="mr-2" />*/}
                             <a className="align-middle user-greeting">Hello, <b>{firebase.auth().currentUser.displayName}</b></a>
                             <button id="btn-nav" className="btn btn-primary font-weight-bold navigation-button user-greeting" onClick={this.onLogoutClick}>Logout</button>
                         </div>:

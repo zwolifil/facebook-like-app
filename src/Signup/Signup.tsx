@@ -5,7 +5,7 @@ import {RoutingData} from "../RoutingData";
 
 export default class Signup extends React.Component {
 
-    private auth = {avatar: {image: '', ifPrivate: false}, description: '', name: '', email: '', pass: '', repPass: ''};
+    private auth = {avatar: undefined, description: '', name: '', email: '', pass: '', repPass: ''};
     private myFormRef: HTMLFormElement;
 
     public constructor(props: {}) {
@@ -22,16 +22,12 @@ export default class Signup extends React.Component {
                 <form ref={(el) => this.myFormRef = el} className="container align-content-center align-self-sm-center signup-form" onSubmit={this.onSignupClick}>
                     <div className="form-group">
                         <label className="signup-form-label">Avatar</label>
-                        <input type="file" name="file" id="file" className="inputFile" accept="image/*" onChange={event => this.auth.avatar.image = event.target.files[0].name} />
+                        <input type="file" name="file" id="file" className="inputFile" accept="image/*" onChange={event => this.auth.avatar = event.target.files[0]} />
                         <label htmlFor="file" className="input-file-icon-wrap">
                             <svg className="input-file-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17">
                                 <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
                             </svg>
                         </label>
-                        <form>
-                            <input type="radio" name="access" value="private" onClick={() => this.auth.avatar.ifPrivate = true}/> Private<br/>
-                            <input type="radio" name="access" value="public" onClick={() => this.auth.avatar.ifPrivate = false}/> Public
-                        </form>
                         <label className="signup-form-label">Description</label>
                         <input type="text" onChange={event => {this.auth.description = event.target.value}} className="form-control" placeholder="Type something about yourself"/>
                         <label className="signup-form-label">Name</label>
@@ -51,7 +47,7 @@ export default class Signup extends React.Component {
         );
     }
 
-    private onSignupClick(event) {
+    private onSignupClick = (event) => {
         event.preventDefault();
         if(this.auth.pass !== this.auth.repPass) {
             const x = document.getElementById("log-alert-child-signup");
@@ -66,18 +62,32 @@ export default class Signup extends React.Component {
             .then( () => {
                 document.getElementById("log-alert-child-signup").style.display = "none";
 
-                firebase.auth().currentUser.updateProfile({
-                    displayName: this.auth.name,
-                    photoURL: "/Images/" + this.auth.avatar
-                });
-
                 const myProfile = {
                     name: this.auth.name,
                     description: this.auth.description,
-                    avatar: this.auth.avatar,
+                    avatar: '',
                     _id: firebase.auth().currentUser.uid,
                     images: []
                 };
+
+                if(this.auth.avatar) {
+                    const uploadFiles = new FormData();
+                    uploadFiles.append('imgUploader', this.auth.avatar);
+
+                    fetch('http://localhost:8000/images', {
+                        method: 'post',
+                        body: uploadFiles
+                    }).then(response => response.json())
+                        .then(data => {
+                            firebase.auth().currentUser.updateProfile({
+                                displayName: this.auth.name,
+                                photoURL: "http://localhost:8000/images" + data.uid
+                            });
+                            RoutingData.images.push(data);
+                            myProfile.avatar = data.uid;
+                        })
+                        .catch(error => console.log(error));
+                }
 
                 fetch('http://localhost:8000/profiles', {
                     method: 'post',
