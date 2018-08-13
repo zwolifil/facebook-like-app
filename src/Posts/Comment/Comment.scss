@@ -6,11 +6,25 @@
     margin: 5px 0;
   }
 
-  .link-content {
+  .headline {
     clear: both;
-    
-    .avatar-logo {
-      margin-right: 1%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .comment-delete {
+      cursor: pointer;
+    }
+
+    .link-content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-evenly;
+
+      .avatar-logo {
+        margin-right: 1%;
+      }
     }
   }
 

@@ -5,14 +5,14 @@ import Comment from "../Posts/Comment/Comment";
 import {RoutingData} from "../RoutingData";
 
 
-export default class Images extends React.Component<{small, large, post, smallImageStyle, index}, {imageClicked, commentAdded}> {
+export default class Images extends React.Component<{small, large, post, smallImageStyle, index}, {imageClicked, commentAdded, commentDeleted}> {
 
     private comment: string;
     private myInputRef: HTMLInputElement;
 
     public constructor(props) {
         super(props);
-        this.state = {imageClicked: false, commentAdded: false};
+        this.state = {imageClicked: false, commentAdded: false, commentDeleted: false};
     }
 
     public render() {
@@ -55,7 +55,8 @@ export default class Images extends React.Component<{small, large, post, smallIm
                                         <p className="if-nothing-element">Be first to comment</p>
                                             :
                                         filteredComments.reverse().map(comment => {
-                                            return <Comment key={comment._id} comment={comment.content} profile={comment.profile} />
+                                            return <Comment key={comment._id} id={comment._id} comment={comment.content} profile={comment.profile}
+                                                            postProfile={this.props.post._idProfile} toParentCallback={() => this.setState({commentDeleted: true})} />
                                         })
                                 }
                             </div>
