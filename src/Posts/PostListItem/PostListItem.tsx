@@ -19,7 +19,7 @@ const PostListItem = ({post, profile, toParentCallback}) => {
                 <div className="card-body text-left pl-0">
                     {post.content}
                 </div>
-                {RoutingData.images && RoutingData.images.length ?
+                {RoutingData.images && RoutingData.images.length && post.image ?
                     <div className="parent">
                         <Images small={"http://localhost:8000/images/" + post.image} large={"http://localhost:8000/images/" + post.image}
                                 index={post.image} smallImageStyle={"small-image-post"} post={post} />

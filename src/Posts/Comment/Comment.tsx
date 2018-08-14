@@ -4,12 +4,12 @@ import {Link} from 'react-router';
 import "./Comment.scss";
 import {RoutingData} from "../../RoutingData";
 
-class Comment extends React.Component<{id, comment, profile, postProfile, toParentCallback}> {
+class Comment extends React.Component<{id, comment, profile, imageProfile, toParentCallback}> {
 
 
     public render() {
         const {
-            comment, profile, postProfile
+            comment, profile, imageProfile
         } = this.props;
 
         const myProfile = RoutingData.profiles.find(el => el._id === profile);
@@ -29,8 +29,10 @@ class Comment extends React.Component<{id, comment, profile, postProfile, toPare
                              width={40}/>
                         {myProfile.name}
                     </Link>
-                    {RoutingData.myProfile._id === postProfile ?
-                        <p className="comment-delete" onClick={this.deleteComment}>X</p>
+                    {RoutingData.myProfile._id === imageProfile ?
+                        <button type="button" className="comment-delete" aria-label="Close" onClick={this.deleteComment}>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                         :
                         ""
                     }

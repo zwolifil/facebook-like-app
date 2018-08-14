@@ -5,14 +5,15 @@ import Comment from "../Posts/Comment/Comment";
 import {RoutingData} from "../RoutingData";
 
 
-export default class Images extends React.Component<{small, large, post, smallImageStyle, index}, {imageClicked, commentAdded, commentDeleted}> {
+export default class Images extends React.Component<{small, large, post, smallImageStyle, index}, {imageClicked, commentAdded, commentDeleted, largeImageHeight}> {
 
     private comment: string;
     private myInputRef: HTMLInputElement;
+    private LargeImage: HTMLImageElement;
 
     public constructor(props) {
         super(props);
-        this.state = {imageClicked: false, commentAdded: false, commentDeleted: false};
+        this.state = {imageClicked: false, commentAdded: false, commentDeleted: false, largeImageHeight: 0};
     }
 
     public render() {
@@ -42,47 +43,64 @@ export default class Images extends React.Component<{small, large, post, smallIm
                 <div className="fullscreen-opacity"  onClick={() => this.setState({imageClicked: false})} />
                 <div className="content-wrapper">
                     <div className="content-wrapper-child">
-                        <img src={this.props.large} className="fullscreen-image" onClick={() => this.setState({imageClicked: true})} />
-                        <div className="comment-section-parent">
-                            <button type="button" className="close" aria-label="Close" onClick={() => this.setState({imageClicked: false})}>
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <input ref={(el) => this.myInputRef = el} type="text" className="input-group-text m-2" placeholder="Write comment" onChange={event => {this.comment = event.target.value}} />
-                            <button className='btn btn-primary' onClick={this.onCommentClick}>Send</button>
-                            <div className="comment-section" >
-                                {
-                                    !filteredComments.length ?
-                                        <p className="if-nothing-element">Be first to comment</p>
+                        <img src={this.props.large} onLoad={() => this.setState({largeImageHeight: this.LargeImage.naturalHeight})} ref={(el) => this.LargeImage = el} className="fullscreen-image" onClick={() => this.setState({imageClicked: true})}
+                              />
+                        {this.state.largeImageHeight ?
+                            <div className="comment-section-parent" style={{height: this.state.largeImageHeight}}>
+                                <button type="button" className="close" aria-label="Close"
+                                        onClick={() => this.setState({imageClicked: false})}>
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <input ref={(el) => this.myInputRef = el} type="text" className="input-group-text m-2"
+                                       placeholder="Write comment"
+                                       onChange={event => {
+                                           this.comment = event.target.value
+                                       }} onKeyUp={this.onCommentClick}/>
+                                <div className="comment-section">
+                                    {
+                                        !filteredComments.length ?
+                                            <p className="if-nothing-element">Be first to comment</p>
                                             :
-                                        filteredComments.reverse().map(comment => {
-                                            return <Comment key={comment._id} id={comment._id} comment={comment.content} profile={comment.profile}
-                                                            postProfile={this.props.post._idProfile} toParentCallback={() => this.setState({commentDeleted: true})} />
-                                        })
-                                }
+                                            filteredComments.reverse().map(comment => {
+                                                return <Comment key={comment._id} id={comment._id}
+                                                                comment={comment.content} profile={comment.profile}
+                                                                imageProfile={this.props.post._idProfile}
+                                                                toParentCallback={() => this.setState({commentDeleted: true})}/>
+                                            })
+                                    }
+                                </div>
                             </div>
-                        </div>
+                            :
+                            ""
+                        }
                     </div>
                 </div>
             </div>
         )
     }
 
-    private onCommentClick = () => {
-        fetch('http://localhost:8000/images/' +this.props.index + '/comments', {
-            method: 'post',
-            body: JSON.stringify({content: this.comment, profile: RoutingData.myProfile._id, idImage: this.props.index}),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((postResponse) => postResponse.json())
+    private onCommentClick = (event) => {
+        if (event.keyCode === 13) {
+            fetch('http://localhost:8000/images/' + this.props.index + '/comments', {
+                method: 'post',
+                body: JSON.stringify({
+                    content: this.comment,
+                    profile: RoutingData.myProfile._id,
+                    idImage: this.props.index
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((postResponse) => postResponse.json())
                 .then(postData => {
                     RoutingData.comments.push(postData);
                     this.setState({commentAdded: true});
                 });
 
-        this.myInputRef.value = "";
-        this.comment = "";
+            this.myInputRef.value = "";
+            this.comment = "";
+        }
     }
 
 }

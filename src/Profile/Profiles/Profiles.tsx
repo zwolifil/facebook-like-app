@@ -38,9 +38,7 @@ export default class Profiles extends React.Component<{location}, {isOpen, curre
             location
         } = this.props;
         const {
-            images,
-            isOpen,
-            current
+            images
         } = this.state;
         return(
             <div className="container-fluid d-flex flex-column align-items-center mb-5">
@@ -57,38 +55,10 @@ export default class Profiles extends React.Component<{location}, {isOpen, curre
                     <p>{location.state.description}</p>
                 </div>
                 <div className="w-75 mt-3">
-                    <Gallery images={images} onImageClick={this.openLightbox} />
-                    <Lightbox
-                        backdropClosesModal={true}
-                        images={images}
-                        isOpen={isOpen}
-                        onClickPrev={this.onPrevClick}
-                        onClickNext={this.onNextClick}
-                        currentImage={current}
-                        onClose={this.onClose}
-                    />
+                    <Gallery images={images} imageProfile={location.state._id} />
                 </div>
             </div>
         );
-    }
-
-    private openLightbox = (index) => {
-        this.setState({
-            current: index,
-            isOpen: true,
-        });
-    }
-
-    private onClose = () => {
-        this.setState({isOpen: false});
-    }
-
-    private onNextClick = () => {
-        this.setState({current: this.state.current+1})
-    }
-
-    private onPrevClick = () => {
-        this.setState({current: this.state.current-1})
     }
 
 }

@@ -128,6 +128,15 @@ export default class Profile extends React.Component{
                 .then(data => {
                     RoutingData.images.push(data);
                     myProfile.avatar = data.uid;
+                    fetch('http://localhost:8000/profiles/' + myProfile._id, {
+                        method: 'put',
+                        body: JSON.stringify(myProfile),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then((postResponse) => postResponse.json())
+                        .then(postData => {
+                        });
                     firebase.auth().currentUser.updateProfile({
                         displayName: firebase.auth().currentUser.displayName,
                         photoURL: "http://localhost:8000/images/" + data.uid

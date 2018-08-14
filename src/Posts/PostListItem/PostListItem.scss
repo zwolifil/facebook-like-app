@@ -1,6 +1,13 @@
 .list-group-item {
 
   .headline {
+
+    & > a {
+      outline: none;
+      text-decoration: none;
+      font-weight: bold;
+      color: black;
+    }
     .avatar-logo {
       margin-right: 1%;
     }

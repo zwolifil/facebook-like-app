@@ -14,6 +14,12 @@
 
     .comment-delete {
       cursor: pointer;
+      font-size: x-large;
+      position: absolute;
+      top: 3px;
+      right: 7px;
+      background-color: transparent;
+      border: none;
     }
 
     .link-content {
@@ -21,6 +27,10 @@
       flex-direction: row;
       align-items: center;
       justify-content: space-evenly;
+      outline: none;
+      text-decoration: none;
+      font-weight: bold;
+      color: black;
 
       .avatar-logo {
         margin-right: 1%;
