@@ -3,7 +3,6 @@ import * as firebase from 'firebase';
 import {browserHistory, Router} from 'react-router';
 import './Profile.scss';
 import {RoutingData} from "../RoutingData";
-import {throws} from "assert";
 
 export default class Profile extends React.Component{
 
@@ -94,6 +93,8 @@ export default class Profile extends React.Component{
         event.preventDefault();
 
         const myProfile = RoutingData.myProfile;
+        const imageForm = new FormData();
+        imageForm.append('dataType', 'Profile');
 
         if(this.name) {
             firebase.auth().currentUser.updateProfile({
@@ -101,7 +102,13 @@ export default class Profile extends React.Component{
                 photoURL: firebase.auth().currentUser.photoURL
             });
             myProfile.name = this.name;
-            this.onPostsUpdate(myProfile);
+            imageForm.append('nameChange', 'true');
+            let posts = RoutingData.posts.filter(post => post._idProfile === myProfile._id);
+            posts = posts.map(post => {
+                    post.author = myProfile.name;
+                    return post;
+                });
+            imageForm.append('postsToChange', JSON.stringify(posts));
         }
 
         if(this.email) {
@@ -118,31 +125,8 @@ export default class Profile extends React.Component{
 
         if(this.avatarFile) {
 
-            const imageForm = new FormData();
             imageForm.append('imgUploader', this.avatarFile);
-
-            fetch('http://localhost:8000/images', {
-                method: 'post',
-                body: imageForm
-            }).then(response => response.json())
-                .then(data => {
-                    RoutingData.images.push(data);
-                    myProfile.avatar = data.uid;
-                    fetch('http://localhost:8000/profiles/' + myProfile._id, {
-                        method: 'put',
-                        body: JSON.stringify(myProfile),
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }).then((postResponse) => postResponse.json())
-                        .then(postData => {
-                        });
-                    firebase.auth().currentUser.updateProfile({
-                        displayName: firebase.auth().currentUser.displayName,
-                        photoURL: "http://localhost:8000/images/" + data.uid
-                    });
-                })
-                .catch(error => console.log(error));
+            imageForm.append('ifAvatar', 'true');
         }
 
 
@@ -151,48 +135,21 @@ export default class Profile extends React.Component{
         }
 
         if(this.Files.image) {
-            const imageForm = new FormData();
             imageForm.append('imgUploader', this.Files.image);
-
-            fetch('http://localhost:8000/images', {
-                method: 'post',
-                body: imageForm
-            }).then(response => response.json())
-                .then(data => {
-                    RoutingData.images.push(data);
-                    myProfile.images.push({image: data.uid, ifPrivate: this.Files.ifPrivate});
-                    fetch('http://localhost:8000/profiles/' + myProfile._id, {
-                        method: 'put',
-                        body: JSON.stringify(myProfile),
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }).then((postResponse) => postResponse.json())
-                        .then(postData => {
-                        });
-                })
-                .catch(error => throws(error));
+            imageForm.append('ifGalleryAdd', 'true');
+            imageForm.append('galleryPrivate', this.Files.ifPrivate);
         }
+        imageForm.append('body', JSON.stringify(myProfile));
 
-
+        fetch('http://localhost:8000/images', {
+            method: 'post',
+            body: imageForm
+        }).then(response => response.json())
+            .then(data => {
+                data.map(image => RoutingData.images.push(image));
+            })
+            .catch(error => console.log(error));
 
         this.myRef.reset();
     }
-
-    private onPostsUpdate(myProfile) {
-        RoutingData.posts.filter(post => post._idProfile === myProfile._id).map(post => {
-            fetch('http://localhost:8000/posts/' + post._id, {
-                method: 'put',
-                body: JSON.stringify({name: myProfile.name}),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then((postResponse) => postResponse.json())
-                .then(postData => {
-                });
-
-            post.author = myProfile.name;
-        })
-    }
-
 }

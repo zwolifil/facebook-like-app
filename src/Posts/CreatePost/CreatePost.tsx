@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as firebase from 'firebase';
 import './CreatePost.scss';
 import {RoutingData} from "../../RoutingData";
-import {throws} from "assert";
 
 export default class CreatePost extends React.Component<{toParentCallback}> {
 
@@ -43,19 +42,27 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
     private uploadDocumentRequest = file => {
         const uploadFiles = new FormData();
         uploadFiles.append('imgUploader', file);
+        uploadFiles.append('dataType', 'Post');
+
+        const postData = {
+            image: "",
+            content: this.postContent,
+            author: firebase.auth().currentUser.displayName,
+            _idProfile: RoutingData.myProfile._id
+        };
+        uploadFiles.append('body', JSON.stringify(postData));
 
         fetch('http://localhost:8000/images', {
             method: 'post',
             body: uploadFiles
-        }).then(response => response.json())
+        })
+            .then(response => response.json())
             .then(data => {
-                this.onSendPost({
-                    image: data.uid,
-                    content: this.postContent,
-                    author: firebase.auth().currentUser.displayName,
-                    _idProfile: RoutingData.myProfile._id
+                data.map(image => {
+                    RoutingData.images.push(image);
+                    postData.image = image.uid;
                 });
-                RoutingData.images.push(data);
+                this.props.toParentCallback(postData);
             })
         .catch(error => console.log(error));
     }

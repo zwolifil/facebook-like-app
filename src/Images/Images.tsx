@@ -64,7 +64,7 @@ export default class Images extends React.Component<{small, large, post, smallIm
                                             filteredComments.reverse().map(comment => {
                                                 return <Comment key={comment._id} id={comment._id}
                                                                 comment={comment.content} profile={comment.profile}
-                                                                imageProfile={this.props.post._idProfile}
+                                                                imageProfile={this.props.post._idProfile ? this.props.post._idProfile : this.props.post}
                                                                 toParentCallback={() => this.setState({commentDeleted: true})}/>
                                             })
                                     }

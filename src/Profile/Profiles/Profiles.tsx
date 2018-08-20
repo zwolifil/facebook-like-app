@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {browserHistory} from 'react-router';
-import Lightbox from 'react-images';
 import Gallery from '../Gallery/Gallery';
 
 import './Profiles.scss';
