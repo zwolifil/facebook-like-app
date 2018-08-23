@@ -1,9 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
 import {browserHistory, Router} from 'react-router';
 import * as firebase from 'firebase';
 import Routes from './Routes';
+import {store} from "./store";
 
 const config = {
     apiKey: "AIzaSyBjZui6CTBv9Xc6Epjyyl8zmaKrOO-5C74",
@@ -15,4 +17,8 @@ const config = {
 };
 firebase.initializeApp(config);
 
-ReactDOM.render(<Router history={browserHistory} routes={Routes} />, document.getElementById('root'));
+ReactDOM.render(
+    <Provider store={store}>
+                <Router history={browserHistory} routes={Routes} />
+            </Provider>,
+    document.getElementById('root'));

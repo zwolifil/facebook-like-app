@@ -1,17 +1,17 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import * as firebase from 'firebase';
 import './Signup.scss';
-import {RoutingData} from "../RoutingData";
+import {setMyProfile} from "../../actions";
 
-export default class Signup extends React.Component {
+class Signup extends React.Component<{setMyProfile, profiles, images}> {
 
     private auth = {avatar: undefined, description: '', name: '', email: '', pass: '', repPass: ''};
     private myFormRef: HTMLFormElement;
 
-    public constructor(props: {}) {
+    public constructor(props) {
         super(props);
 
-        this.onSignupClick = this.onSignupClick.bind(this);
         this.render = this.render.bind(this);
     }
 
@@ -73,6 +73,8 @@ export default class Signup extends React.Component {
                 if(this.auth.avatar) {
                     const uploadFiles = new FormData();
                     uploadFiles.append('imgUploader', this.auth.avatar);
+                    uploadFiles.append('dataType', 'ProfilePost');
+                    uploadFiles.append('body', JSON.stringify(myProfile));
 
                     fetch('http://localhost:8000/images', {
                         method: 'post',
@@ -83,25 +85,24 @@ export default class Signup extends React.Component {
                                 displayName: this.auth.name,
                                 photoURL: "http://localhost:8000/images" + data.uid
                             });
-                            RoutingData.images.push(data);
+                            this.props.images.push(data);
                             myProfile.avatar = data.uid;
+                            this.props.setMyProfile(myProfile);
+                            this.props.profiles.push(myProfile);
+                            this.myFormRef.reset();
                         })
                         .catch(error => console.log(error));
+                } else {
+                    fetch('http://localhost:8000/profiles', {
+                        method: 'post',
+                        body: JSON.stringify(myProfile),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then((postResponse) => postResponse.json())
+                        .then(postData => {
+                        });
                 }
-
-                fetch('http://localhost:8000/profiles', {
-                    method: 'post',
-                    body: JSON.stringify(myProfile),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then((postResponse) => postResponse.json())
-                    .then(postData => {
-                    });
-
-                RoutingData.setMyProfile(myProfile);
-                RoutingData.profiles.push(myProfile);
-                this.myFormRef.reset();
             })
             .catch(() => {
                 const x = document.getElementById("log-alert-child-signup");
@@ -113,3 +114,14 @@ export default class Signup extends React.Component {
 
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        images: state.images,
+        profiles: state.profiles
+    }
+};
+
+const mapDispatchToProps = {setMyProfile};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

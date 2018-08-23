@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import './Gallery.scss';
-import Images from "../../Images/Images";
+import Images from "../../../components/Images/Images";
 
 export default class Gallery extends React.Component<{images, imageProfile}> {
 

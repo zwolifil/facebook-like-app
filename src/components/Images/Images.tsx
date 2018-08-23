@@ -1,11 +1,13 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 
 import './Images.scss';
 import Comment from "../Posts/Comment/Comment";
-import {RoutingData} from "../RoutingData";
+import {setComments} from '../../actions';
 
 
-export default class Images extends React.Component<{small, large, post, smallImageStyle, index}, {imageClicked, commentAdded, commentDeleted, largeImageHeight}> {
+class Images extends React.Component<{small, large, post, smallImageStyle, index, comments, myProfile, setComments},
+                                                    {imageClicked, commentAdded, commentDeleted, largeImageHeight}> {
 
     private comment: string;
     private myInputRef: HTMLInputElement;
@@ -28,24 +30,23 @@ export default class Images extends React.Component<{small, large, post, smallIm
                     <img src={small} className={this.props.smallImageStyle} />
                 </div>
                 {
-                    this.state.imageClicked ?
-                        this.onImageClick() : ""
+                    this.state.imageClicked && this.onImageClick()
                 }
             </div>
         );
     }
 
     private onImageClick = () => {
-        const filteredComments = RoutingData.comments.filter(comment => comment.idImage === this.props.index);
+        const filteredComments = this.props.comments.filter(comment => comment.idImage === this.props.index);
 
         return (
             <div className="fullscreen-image-wrapper" >
                 <div className="fullscreen-opacity"  onClick={() => this.setState({imageClicked: false})} />
                 <div className="content-wrapper">
                     <div className="content-wrapper-child">
-                        <img src={this.props.large} onLoad={() => this.setState({largeImageHeight: this.LargeImage.naturalHeight})} ref={(el) => this.LargeImage = el} className="fullscreen-image" onClick={() => this.setState({imageClicked: true})}
-                              />
-                        {this.state.largeImageHeight ?
+                        <img src={this.props.large} onLoad={() => this.setState({largeImageHeight: this.LargeImage.naturalHeight})}
+                             ref={(el) => this.LargeImage = el} className="fullscreen-image" onClick={() => this.setState({imageClicked: true})} />
+                        {this.state.largeImageHeight &&
                             <div className="comment-section-parent" style={{height: this.state.largeImageHeight}}>
                                 <button type="button" className="close" aria-label="Close"
                                         onClick={() => this.setState({imageClicked: false})}>
@@ -70,14 +71,12 @@ export default class Images extends React.Component<{small, large, post, smallIm
                                     }
                                 </div>
                             </div>
-                            :
-                            ""
                         }
                     </div>
                 </div>
             </div>
         )
-    }
+    };
 
     private onCommentClick = (event) => {
         if (event.keyCode === 13) {
@@ -85,7 +84,7 @@ export default class Images extends React.Component<{small, large, post, smallIm
                 method: 'post',
                 body: JSON.stringify({
                     content: this.comment,
-                    profile: RoutingData.myProfile._id,
+                    profile: this.props.myProfile._id,
                     idImage: this.props.index
                 }),
                 headers: {
@@ -94,7 +93,9 @@ export default class Images extends React.Component<{small, large, post, smallIm
             })
                 .then((postResponse) => postResponse.json())
                 .then(postData => {
-                    RoutingData.comments.push(postData);
+                    const tmpComments = this.props.comments;
+                    tmpComments.push(postData);
+                    this.props.setComments(tmpComments);
                     this.setState({commentAdded: true});
                 });
 
@@ -102,5 +103,15 @@ export default class Images extends React.Component<{small, large, post, smallIm
             this.comment = "";
         }
     }
-
 }
+
+const mapStateToProps = (state) => {
+    return {
+        comments: state.comments,
+        myProfile: state.myProfile
+    }
+};
+
+const mapDispatchToProps = {setComments};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Images);

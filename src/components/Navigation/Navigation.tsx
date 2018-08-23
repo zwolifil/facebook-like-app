@@ -1,25 +1,30 @@
 import {browserHistory, Link, Router} from 'react-router';
 import * as React from 'react';
+import {connect} from 'react-redux';
 import * as firebase from 'firebase';
 
 import './Navigation.scss';
-import {RoutingData} from "../RoutingData";
+import {setComments, setImages, setMyProfile, setPosts, setProfiles} from '../../actions';
 
-interface IState {ifSigned: boolean, email: string, pass: string}
+interface IState {ifSigned: boolean, email: string, pass: string, loading: boolean}
 
-export default class Navigation extends React.Component<{}, IState> {
+export class Navigation extends React.Component<{ setPosts, setProfiles, setComments, setImages, setMyProfile, profiles }, IState> {
 
-    public constructor(props: {}) {
+    public constructor(props) {
         super(props);
 
         this.render = this.render.bind(this);
-        this.state = {ifSigned : false, email: "", pass: ""};
+        this.state = {ifSigned : false, email: "", pass: "", loading: true};
     }
 
-    public componentDidMount(): void {
+    public componentDidMount() {
         firebase.auth().onAuthStateChanged( function (user) {
             if(user) {
                 this.setState( {ifSigned: true, email: firebase.auth().currentUser.email});
+                this.onPostsGet();
+                this.onProfilesGet();
+                this.onCommentsGet();
+                this.onImagesGet();
             }
             else {
                 this.setState( {ifSigned: false, email: ""});
@@ -49,15 +54,16 @@ export default class Navigation extends React.Component<{}, IState> {
                         </div>
                     }
                     <div className="d-flex flex-row justify-content-around">
-                        {this.state.ifSigned ?
-                            <Link to="/profile" id="btn-nav" className="btn btn-primary font-weight-bold navigation-button user-greeting">Profile</Link> :
-                            ""
+                        {this.state.ifSigned &&
+                            <Link to="/profile" id="btn-nav" className="btn btn-primary font-weight-bold navigation-button user-greeting">Profile</Link>
                         }
                         <Link to={{pathname : "/posts", state: {hash : true}}} id="btn-nav" className="btn btn-primary font-weight-bold navigation-button user-greeting">Posts</Link>
                     </div>
                 </div>
                 <div id="log-alert-child" className="rounded p-1 position-absolute m-auto font-weight-bold" />
-                {this.props.children}
+                {
+                    this.props.children
+                }
             </div>
         );
     }
@@ -66,13 +72,13 @@ export default class Navigation extends React.Component<{}, IState> {
         firebase.auth().signOut().then(() => {
             this.setState({email: "", pass: ""});
         });
-    }
+    };
 
     private onLoginClick = () => {
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass)
             .then(() => {
                 document.getElementById("log-alert-child").style.display = "none";
-                RoutingData.setMyProfile(RoutingData.profiles.find(profile => profile._id === firebase.auth().currentUser.uid));
+                this.props.setMyProfile(this.props.profiles.find(profile => profile._id === firebase.auth().currentUser.uid));
             })
             .catch(() => {
                 const x = document.getElementById("log-alert-child");
@@ -81,5 +87,51 @@ export default class Navigation extends React.Component<{}, IState> {
                 x.addEventListener("mouseover",
                     () => {x.style.display = "none"})
             });
-    }
+    };
+
+    private onPostsGet = () => {
+        fetch('http://localhost:8000/posts')
+            .then(postsResponse => postsResponse.json())
+            .then(postsData => {
+                this.props.setPosts(postsData.reverse());
+            });
+    };
+
+    private onProfilesGet = () => {
+        fetch('http://localhost:8000/profiles')
+            .then(postsResponse => postsResponse.json())
+            .then(postsData => {
+                this.props.setProfiles(postsData);
+                this.props.setMyProfile(this.props.profiles.filter(profile => profile._id === firebase.auth().currentUser.uid)[0]);
+                this.setState({
+                    loading: false
+                });
+            });
+    };
+
+    private onImagesGet = () => {
+        fetch('http://localhost:8000/images')
+            .then(postsResponse => postsResponse.json())
+            .then(postsData => {
+                this.props.setImages(postsData);
+            });
+    };
+
+    private onCommentsGet = () => {
+        fetch('http://localhost:8000/comments')
+            .then(postsResponse => postsResponse.json())
+            .then(postsData => {
+                this.props.setComments(postsData);
+            });
+    };
 }
+
+const mapStateToProps = state => {
+    return {
+        profiles: state.profiles
+    };
+};
+
+const mapDispatchToProps = { setPosts, setProfiles, setComments, setImages, setMyProfile };
+
+export const NavigationApp = connect(mapStateToProps, mapDispatchToProps)(Navigation);

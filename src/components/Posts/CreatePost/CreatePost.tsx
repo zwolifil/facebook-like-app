@@ -1,9 +1,10 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import * as firebase from 'firebase';
 import './CreatePost.scss';
-import {RoutingData} from "../../RoutingData";
+import {setImages} from "../../../actions";
 
-export default class CreatePost extends React.Component<{toParentCallback}> {
+class CreatePost extends React.Component<{toParentCallback, myProfile, images, setImages}> {
 
     private postContent: string;
     private myFormRef: HTMLFormElement;
@@ -48,7 +49,7 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
             image: "",
             content: this.postContent,
             author: firebase.auth().currentUser.displayName,
-            _idProfile: RoutingData.myProfile._id
+            _idProfile: this.props.myProfile._id
         };
         uploadFiles.append('body', JSON.stringify(postData));
 
@@ -58,10 +59,13 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
         })
             .then(response => response.json())
             .then(data => {
+                const tmpImages = this.props.images;
                 data.map(image => {
-                    RoutingData.images.push(image);
+                    tmpImages.push(image);
                     postData.image = image.uid;
                 });
+                // postData._id = data.post;
+                this.props.setImages(tmpImages);
                 this.props.toParentCallback(postData);
             })
         .catch(error => console.log(error));
@@ -79,7 +83,7 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
             this.onSendPost({
                 content: this.postContent,
                 author: firebase.auth().currentUser.displayName,
-                _idProfile: RoutingData.myProfile._id
+                _idProfile: this.props.myProfile._id
             });
         }
 
@@ -101,3 +105,14 @@ export default class CreatePost extends React.Component<{toParentCallback}> {
             });
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        myProfile: state.myProfile,
+        images: state.images
+    }
+};
+
+const mapDispatchToProps = {setImages};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreatePost);

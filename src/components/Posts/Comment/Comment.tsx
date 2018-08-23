@@ -1,27 +1,28 @@
 import * as React from 'react';
 import {Link} from 'react-router';
+import {connect} from 'react-redux';
 
 import "./Comment.scss";
-import {RoutingData} from "../../RoutingData";
+import {setComments} from "../../../actions";
 
-class Comment extends React.Component<{id, comment, profile, imageProfile, toParentCallback}> {
+class Comment extends React.Component<{id, comment, profile, imageProfile, toParentCallback, profiles, myProfile, setComments, comments}> {
 
 
     public render() {
         const {
-            comment, profile, imageProfile
+            comment, profile, imageProfile, profiles
         } = this.props;
 
-        const myProfile = RoutingData.profiles.find(el => el._id === profile);
+        const myProfile = profiles.find(el => el._id === profile);
 
         return (
             <div className="comment-parent list-group-item">
                 <div className="headline">
                     <Link className="link-content" to={{
                         pathname: "/profiles/" + profile, state: {
-                            _id: RoutingData.myProfile._id, name: RoutingData.myProfile.name,
-                            description: RoutingData.myProfile.description, avatar: RoutingData.myProfile.avatar,
-                            images: RoutingData.myProfile.images
+                            _id: this.props.myProfile._id, name: this.props.myProfile.name,
+                            description: this.props.myProfile.description, avatar: this.props.myProfile.avatar,
+                            images: this.props.myProfile.images
                         }
                     }}>
                         <img className="avatar-logo" src={"http://localhost:8000/images/" + myProfile.avatar}
@@ -29,12 +30,10 @@ class Comment extends React.Component<{id, comment, profile, imageProfile, toPar
                              width={40}/>
                         {myProfile.name}
                     </Link>
-                    {RoutingData.myProfile._id === imageProfile ?
+                    {this.props.myProfile._id === imageProfile &&
                         <button type="button" className="comment-delete" aria-label="Close" onClick={this.deleteComment}>
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        :
-                        ""
                     }
                 </div>
                 <div className="comment-content">{comment}</div>
@@ -51,11 +50,21 @@ class Comment extends React.Component<{id, comment, profile, imageProfile, toPar
             }
         })
             .then(postMessage => {
-                RoutingData.setComments(RoutingData.comments.filter(comment => comment._id !== this.props.id));
+                this.props.setComments(this.props.comments.filter(comment => comment._id !== this.props.id));
                 this.props.toParentCallback();
             })
             .catch(err => console.log(err))
     }
 }
 
-export default Comment;
+const mapStateToProps = (state) => {
+    return {
+        profiles: state.profiles,
+        comments: state.comments,
+        myProfile: state.myProfile
+    }
+};
+
+const mapDispatchToProps = { setComments };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Comment);

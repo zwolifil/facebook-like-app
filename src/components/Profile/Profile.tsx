@@ -1,10 +1,11 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import * as firebase from 'firebase';
 import {browserHistory, Router} from 'react-router';
 import './Profile.scss';
-import {RoutingData} from "../RoutingData";
+import {setMyProfile, setProfiles} from "../../actions";
 
-export default class Profile extends React.Component{
+class Profile extends React.Component<{myProfile, posts, images, profiles, setProfiles, setMyProfile}> {
 
     private name: string;
     private email: string;
@@ -55,10 +56,9 @@ export default class Profile extends React.Component{
                                 <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
                             </svg>
                         </label>
-                        <form>
-                            <input type="radio" name="access" value="private" onClick={this.onGalleryPrivateClick}/> Private<br/>
-                            <input type="radio" name="access" value="public" onClick={this.onGalleryPublicClick}/> Public
-                        </form>
+
+                        <input type="radio" name="access" value="private" onClick={this.onGalleryPrivateClick}/> Private<br/>
+                        <input type="radio" name="access" value="public" onClick={this.onGalleryPublicClick}/> Public
                     </div>
 
                     <h2 className="text-center align-self-center font-weight-bold">Add Description</h2>
@@ -92,7 +92,7 @@ export default class Profile extends React.Component{
     private onUpdateClick = (event) => {
         event.preventDefault();
 
-        const myProfile = RoutingData.myProfile;
+        const myProfile = this.props.myProfile;
         const imageForm = new FormData();
         imageForm.append('dataType', 'Profile');
 
@@ -103,7 +103,7 @@ export default class Profile extends React.Component{
             });
             myProfile.name = this.name;
             imageForm.append('nameChange', 'true');
-            let posts = RoutingData.posts.filter(post => post._idProfile === myProfile._id);
+            let posts = this.props.posts.filter(post => post._idProfile === myProfile._id);
             posts = posts.map(post => {
                     post.author = myProfile.name;
                     return post;
@@ -146,10 +146,42 @@ export default class Profile extends React.Component{
             body: imageForm
         }).then(response => response.json())
             .then(data => {
-                data.map(image => RoutingData.images.push(image));
+                const tmpMyProfile = this.props.myProfile;
+                const tmpProfiles = this.props.profiles;
+                data.map((image, index) => {
+                    this.props.images.push(image);
+                    if(this.avatarFile && !index) {
+                        tmpMyProfile.avatar = image.uid;
+                    } else {
+                        tmpMyProfile.images.push({image: image.uid, ifPrivate: this.Files.ifPrivate});
+                    }
+                });
+                this.props.setMyProfile(tmpMyProfile);
+                tmpProfiles.map((profile) => {
+                    if(profile._id === tmpMyProfile._id) {
+                        profile = tmpMyProfile;
+                    }
+                });
+                this.props.setProfiles(tmpProfiles);
             })
             .catch(error => console.log(error));
 
         this.myRef.reset();
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        images: state.images,
+        posts: state.posts,
+        myProfile: state.myProfile,
+        profiles: state.profiles
+    }
+};
+
+const mapDispatchToProps = {
+    setProfiles,
+    setMyProfile
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

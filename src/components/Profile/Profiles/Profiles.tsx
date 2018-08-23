@@ -1,12 +1,11 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import Gallery from '../Gallery/Gallery';
-
 import './Profiles.scss';
-import {RoutingData} from "../../RoutingData";
 
 
-export default class Profiles extends React.Component<{location}, {isOpen, current, images}>{
+class Profiles extends React.Component<{location, myProfile}, {isOpen, current, images}>{
 
     public constructor(props) {
         super(props);
@@ -20,7 +19,7 @@ export default class Profiles extends React.Component<{location}, {isOpen, curre
     public componentDidMount() {
         const images = [];
         for(const image of this.props.location.state.images) {
-            if(!image.ifPrivate || RoutingData.myProfile._id === this.props.location.state._id) {
+            if(!image.ifPrivate || this.props.myProfile._id === this.props.location.state._id) {
                 images.push({
                     src: "http://localhost:8000/images/" + image.image,
                     key: image.image,
@@ -42,10 +41,8 @@ export default class Profiles extends React.Component<{location}, {isOpen, curre
         return(
             <div className="container-fluid d-flex flex-column align-items-center mb-5">
                 <div className="d-flex flex-row align-items-center justify-content-start w-50 mt-5">
-                    {!location.state.avatar.ifPrivate || location.state._id === RoutingData.myProfile._id ?
+                    {!location.state.avatar.ifPrivate || location.state._id === this.props.myProfile._id &&
                         <img src={"http://localhost:8000/images/" + location.state.avatar} className="mr-1" height={60} width={60} />
-                        :
-                        ""
                     }
                     <h2>{location.state.name}</h2>
                 </div>
@@ -61,3 +58,11 @@ export default class Profiles extends React.Component<{location}, {isOpen, curre
     }
 
 }
+
+const mapStateToProps = (state) => {
+    return {
+        myProfile: state.myProfile
+    }
+};
+
+export default connect(mapStateToProps)(Profiles);
