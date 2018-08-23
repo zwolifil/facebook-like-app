@@ -10,6 +10,24 @@ $back-clr : #94a5f6;
     align-self: center;
   }
 
+  .headline {
+
+    & > a {
+      outline: none;
+      text-decoration: none;
+      font-weight: bold;
+      color: black;
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .avatar-logo {
+        margin-right: 5px;
+      }
+    }
+  }
+
   .navigation-button {
     height: 30px;
     margin:0 5px;

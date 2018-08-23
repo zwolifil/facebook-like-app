@@ -41,9 +41,7 @@ class Profiles extends React.Component<{location, myProfile}, {isOpen, current, 
         return(
             <div className="container-fluid d-flex flex-column align-items-center mb-5">
                 <div className="d-flex flex-row align-items-center justify-content-start w-50 mt-5">
-                    {!location.state.avatar.ifPrivate || location.state._id === this.props.myProfile._id &&
-                        <img src={"http://localhost:8000/images/" + location.state.avatar} className="mr-1" height={60} width={60} />
-                    }
+                    <img src={"http://localhost:8000/images/" + location.state.avatar} className="mr-1" height={60} width={60} />
                     <h2>{location.state.name}</h2>
                 </div>
                 <div className="text-left mt-3 w-50 profile-description">

@@ -8,7 +8,7 @@ import {setComments, setImages, setMyProfile, setPosts, setProfiles} from '../..
 
 interface IState {ifSigned: boolean, email: string, pass: string, loading: boolean}
 
-export class Navigation extends React.Component<{ setPosts, setProfiles, setComments, setImages, setMyProfile, profiles }, IState> {
+export class Navigation extends React.Component<{ setPosts, setProfiles, setComments, setImages, setMyProfile, profiles, myProfile, images}, IState> {
 
     public constructor(props) {
         super(props);
@@ -38,8 +38,14 @@ export class Navigation extends React.Component<{ setPosts, setProfiles, setComm
                 <div id="nav" className="nav navbar d-flex flex-row container-fluid navigation-bar">
                     {firebase.auth().currentUser ?
                         <div className="d-flex flex-row justify-content-around">
-                            {/*<img src={firebase.auth().currentUser.photoURL} height={40} width={40} className="mr-2" />*/}
-                            <a className="align-middle user-greeting">Hello, <b>{firebase.auth().currentUser.displayName}</b></a>
+                            <div className="font-weight-bold headline">
+                                <Link to={{pathname : "/profiles/" + this.props.myProfile._id, state: {_id: this.props.myProfile._id, name: this.props.myProfile.name,
+                                        description: this.props.myProfile.description, avatar: this.props.myProfile.avatar, images: this.props.myProfile.images}}}>
+                                    {this.props.images && this.props.images.length && (this.props.myProfile.avatar && <img className="avatar-logo" src={"http://localhost:8000/images/" + this.props.myProfile.avatar} height={40}
+                                                                                        width={40}/>)}
+                                    {this.props.myProfile.name}
+                                </Link>
+                            </div>
                             <button id="btn-nav" className="btn btn-primary font-weight-bold navigation-button user-greeting" onClick={this.onLogoutClick}>Logout</button>
                         </div>:
                         <div>
@@ -128,7 +134,9 @@ export class Navigation extends React.Component<{ setPosts, setProfiles, setComm
 
 const mapStateToProps = state => {
     return {
-        profiles: state.profiles
+        profiles: state.profiles,
+        myProfile: state.myProfile,
+        images: state.images
     };
 };
 
