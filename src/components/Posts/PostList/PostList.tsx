@@ -71,12 +71,14 @@ class PostList extends React.Component<{location, profiles, setProfiles, posts, 
 
     private deleteHashedPosts = () => {
         this.props.location.state = undefined;
-        fetch('http://localhost:8000/posts')
-            .then(postsResponse => postsResponse.json())
-            .then(postsData => {
-                this.props.setPosts(postsData.reverse());
-                this.setState({hashClicked: false});
-            });
+        if(this.state.hashClicked) {
+            fetch('http://localhost:8000/posts')
+                .then(postsResponse => postsResponse.json())
+                .then(postsData => {
+                    this.props.setPosts(postsData.reverse());
+                    this.setState({hashClicked: false});
+                });
+        }
     };
 
     private onGetHashedPost = hash => {

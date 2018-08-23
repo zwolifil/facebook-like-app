@@ -20,9 +20,9 @@ class Comment extends React.Component<{id, comment, profile, imageProfile, toPar
                 <div className="headline">
                     <Link className="link-content" to={{
                         pathname: "/profiles/" + profile, state: {
-                            _id: this.props.myProfile._id, name: this.props.myProfile.name,
-                            description: this.props.myProfile.description, avatar: this.props.myProfile.avatar,
-                            images: this.props.myProfile.images
+                            _id: myProfile._id, name: myProfile.name,
+                            description: myProfile.description, avatar: myProfile.avatar,
+                            images: myProfile.images
                         }
                     }}>
                         <img className="avatar-logo" src={"http://localhost:8000/images/" + myProfile.avatar}
